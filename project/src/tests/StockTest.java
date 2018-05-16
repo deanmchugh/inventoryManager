@@ -5,6 +5,11 @@ import org.junit.Test;
 import objects.*;
 import exceptions.*;
 
+/**
+ * A series of tests to assess the capability of the Stock class.
+ * As Stock is a collection of Items, the Item class must be complete.
+ * @author Tim
+ */
 public class StockTest {
 
 	private Item apple;
@@ -67,6 +72,14 @@ public class StockTest {
 		assertEquals(5, fruits.getQuantity(apple));
 	}
 	
+	/**
+	 * Removing an Item to zero quantity does not remove Item object from Stock
+	 */
+	@Test
+	public void removeToZero() {
+		fruits.modifyQuantity(apple, -5);
+		assertEquals(0, fruits.getQuantity(apple));
+	}
 	/**
 	 * Cannot remove quantity from Item not in Stock
 	 * @throws StockException
@@ -166,6 +179,47 @@ public class StockTest {
 		assertEquals(6, fruitBasket.getTotalQuantity());
 		assertEquals(4, fruits.getTotalQuantity());
 		assertEquals(10, fruits.getMinTemp());
+	}
+	
+	/**
+	 * Iterates over Items in Stock to print names
+	 */
+	@Test
+	public void iterateItems() {
+		String fruitType = "";
+		
+		apple = new Item("apple", 1, 2, 3, 4, 5);
+		banana = new Item("banana", 6, 7, 8, 9, 10);
+		fruits = new Stock();
+		fruits.modifyQuantity(apple, 5);
+		fruits.modifyQuantity(banana, 5);
+		
+		for(Item fruitType : fruits) {
+			fruitNames += fruitType.getName();
+		}
+		
+		assertEquals("applebanana", fruitNames);
+	}
+	
+	/**
+	 * Iterates over Items in Stock to print names
+	 * Must iterate alphabetically
+	 */
+	@Test
+	public void iterateAlphabetically() {
+		String fruitType = "";
+		
+		apple = new Item("apple", 1, 2, 3, 4, 5);
+		banana = new Item("banana", 6, 7, 8, 9, 10);
+		fruits = new Stock();
+		fruits.modifyQuantity(banana, 5);
+		fruits.modifyQuantity(apple, 5);
+		
+		for(Item fruitType : fruits) {
+			fruitNames += fruitType.getName();
+		}
+		
+		assertEquals("applebanana", fruitNames);
 	}
 	
 }

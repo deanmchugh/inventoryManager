@@ -5,6 +5,10 @@ import org.junit.Test;
 import objects.Item;
 import exceptions.*;
 
+/**
+ * A series of tests to assess the capability of the Item class.
+ * @author Tim
+ */
 public class ItemTest {
 	
 	private Item apple;
@@ -87,6 +91,15 @@ public class ItemTest {
 	@Test (expected = StockException.class)
 	public void NegativeReorderAmount() throws StockException {
 		apple = new Item("apple", 1, 2, 3, -4);
+	}
+	
+	
+	/**
+	 * Getting name
+	 */
+	@Test
+	public void getName() {
+		assertEquals("apple", apple.getName());
 	}
 	
 	/**
