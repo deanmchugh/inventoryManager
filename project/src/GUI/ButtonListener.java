@@ -31,18 +31,25 @@ public class ButtonListener implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		fileSelect();
-		
+		fileSelect(e);
 	}
 	
-	public void fileSelect() {
+	public void fileSelect(MouseEvent e) {
+		Object source = e.getSource();
 		JButton open = new JButton();
+		JButton save = new JButton();
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new java.io.File("."));
         fc.setDialogTitle("Select CVS File");
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        if(fc.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
-        	//
-        }
+        if(source == GUI.output) {
+        	if(fc.showSaveDialog(save) == JFileChooser.SAVE_DIALOG) {
+            	//create cvs file for manifest 
+            }
+        }else if(source == GUI.sales) {
+        	if(fc.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
+            	//read cvs file and create stock
+            }
+        }      
     }
 }
