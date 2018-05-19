@@ -26,7 +26,7 @@ public class FileWrite {
 	 * Writes shipping Manifest to .csv file, overwriting existing file.
 	 * The type of each Truck in the Manifest is written to a seperate line, each followed by its Contents.
 	 * @param shippingManifest Manifest object containing each Truck assigned to deliver Stock to the Store.
-	 * @throws CSVFormatException Throws an exception when the FileWriter throws an exception during either the writing or file closing operations.
+	 * @throws CSVFormatException Exception caused by errors in writing or closing file.
 	 * @author Tim
 	 */
 	public static void writeManifest(Manifest shippingManifest) throws CSVFormatException {
