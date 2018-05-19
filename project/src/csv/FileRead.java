@@ -45,11 +45,7 @@ public class FileRead {
 				throw new CSVFormatException("Error reading file!");
 			}
 			
-			try {
-				reader.close();
-			} catch (IOException e) {
-				throw new CSVFormatException("Error closing file!");
-			}
+			closeReader();
 		}
 		
 		
@@ -59,7 +55,7 @@ public class FileRead {
 		public static void readManifest() {
 			String fileName = filePath + "manifest.csv";
 			
-			
+			closeReader();
 		}
 		
 		
@@ -91,12 +87,8 @@ public class FileRead {
 			} catch (IOException e){
 				throw new CSVFormatException("Error reading file!");
 			}
-			try {
-				reader.close();
-			} catch (IOException e) {
-				throw new CSVFormatException("Error closing file!");
-			}
 			
+			closeReader();
 			salesLogNum++;
 			return salesData;
 		}
@@ -126,6 +118,19 @@ public class FileRead {
 				return new Item(name, properties[0], properties[1], properties[2], properties[3], properties[4]);
 			} else {
 				throw new CSVFormatException();
+			}
+		}
+		
+		
+		/**
+		 * Method to attempt to close open file cleanly, used by all public methods.
+		 * @throws CSVFormatException Exception occurs when program fails to close file correctly.
+		 */
+		private static void closeReader() throws CSVFormatException {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				throw new CSVFormatException("Error closing file!");
 			}
 		}
 		
