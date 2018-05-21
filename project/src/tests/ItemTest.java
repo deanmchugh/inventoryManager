@@ -2,8 +2,10 @@ package tests;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import delivery.RefridgeratedTruck;
+import exceptions.StockException;
 import objects.Item;
-import exceptions.*;
 
 /**
  * A series of tests to assess the capability of the Item class.
@@ -34,6 +36,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getCost() {
+		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(1, apple.getCost());
 	}
 	
@@ -99,6 +102,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getName() {
+		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals("apple", apple.getName());
 	}
 	
@@ -116,6 +120,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getReorderPoint() {
+		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(3, apple.getReorderPoint());
 	}
 	
@@ -124,6 +129,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getReorderAmount() {
+		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(4, apple.getReorderAmount());
 	}
 	
@@ -132,6 +138,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void testTemperature() {
+		apple = new Item("apple", 1, 2, 3, 4);
 		assertFalse(apple.isTempControlled());
 	}
 	
@@ -147,7 +154,7 @@ public class ItemTest {
 	/**
 	 * Can't get maximum temperature of a dry item
 	 */
-	@Test (expected = stockException.class)
+	@Test (expected = StockException.class)
 	public void noTemp() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(11, apple.getTemp());
