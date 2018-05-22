@@ -75,36 +75,40 @@ public class TruckTest {
 	
 	/**
 	 * test cost getter function
+	 * @throws DeliveryException 
 	 */
 	@Test
-	public void testGetCost() {
+	public void testGetCost() throws DeliveryException {
 		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(100, truck.getCost());
 	}
 	
 	/**
 	 * test cargo cap getter function
+	 * @throws DeliveryException 
 	 */
 	@Test
-	public void testGetCargoCap() {
+	public void testGetCargoCap() throws DeliveryException {
 		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(100, truck.getCargoCap());
 	}
 	
 	/**
 	 * test cargo getter function 
+	 * @throws DeliveryException 
 	 */
 	@Test
-	public void testGetCargo() {
+	public void testGetCargo() throws DeliveryException {
 		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(stock, truck.getCargo());
 	}
 	
 	/**
 	 * test temp getter 
+	 * @throws DeliveryException 
 	 */
 	@Test
-	public void testGetTemp() {
+	public void testGetTemp() throws DeliveryException {
 		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(10, truck.getTemp());
 	}
