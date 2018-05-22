@@ -17,54 +17,60 @@ import exceptions.DeliveryException;
 public class TruckTest {
 
 	private Truck truck;
-	private Stock stock = null;
+	private Stock stock = new Stock();
 	
 	/**
 	 * Constructs a ordinary truck 
+	 * @throws DeliveryException 
 	 */
 	@Test 
-	public void constructOrdinaryTruck() {
+	public void constructOrdinaryTruck() throws DeliveryException {
 		truck = new OrdinaryTruck(100, 100, stock);
 	}
 	
 	/**
 	 * constructs refridgerated truck 
+	 * @throws DeliveryException 
 	 */
 	@Test
-	public void constructRefrigeratedTruck() {
-		truck = new RefridgeratedTruck(100, 100, stock, 10);
+	public void constructRefrigeratedTruck() throws DeliveryException {
+		truck = new RefrigeratedTruck(100, 100, stock, 10);
 	}
 	
 	/**
 	 * cant construct truck with negative cost
+	 * @throws DeliveryException 
 	 */
 	@Test (expected = DeliveryException.class)
-	public void negativeCost() {
-		truck = new RefridgeratedTruck(-100, 100, stock, 10);
+	public void negativeCost() throws DeliveryException {
+		truck = new RefrigeratedTruck(-100, 100, stock, 10);
 	}
 	
 	/**
 	 * cant construct truck with negative stock cap
+	 * @throws DeliveryException 
 	 */
 	@Test (expected = DeliveryException.class)
-	public void negativeCargoCap() {
-		truck = new RefridgeratedTruck(100, -100, stock, 10);
+	public void negativeCargoCap() throws DeliveryException {
+		truck = new RefrigeratedTruck(100, -100, stock, 10);
 	}
 	
 	/**
 	 * cant construct a truck without cargo 
+	 * @throws DeliveryException 
 	 */
 	@Test (expected = DeliveryException.class)
-	public void noCargo() {
-		truck = new RefridgeratedTruck(100, 100, null, 10);
+	public void noCargo() throws DeliveryException {
+		truck = new RefrigeratedTruck(100, 100, null, 10);
 	}
 	
 	/**
 	 * cant construct refridgerated truck with negative temp 
+	 * @throws DeliveryException 
 	 */
 	@Test (expected = DeliveryException.class)
-	public void negativeTemp() {
-		truck = new RefridgeratedTruck(100, 100, stock, -10);
+	public void negativeTemp() throws DeliveryException {
+		truck = new RefrigeratedTruck(100, 100, stock, -10);
 	}
 	
 	/**
@@ -72,7 +78,7 @@ public class TruckTest {
 	 */
 	@Test
 	public void testGetCost() {
-		truck = new RefridgeratedTruck(100, 100, stock, 10);
+		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(100, truck.getCost());
 	}
 	
@@ -81,7 +87,7 @@ public class TruckTest {
 	 */
 	@Test
 	public void testGetCargoCap() {
-		truck = new RefridgeratedTruck(100, 100, stock, 10);
+		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(100, truck.getCargoCap());
 	}
 	
@@ -90,7 +96,7 @@ public class TruckTest {
 	 */
 	@Test
 	public void testGetCargo() {
-		truck = new RefridgeratedTruck(100, 100, stock, 10);
+		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(stock, truck.getCargo());
 	}
 	
@@ -99,7 +105,7 @@ public class TruckTest {
 	 */
 	@Test
 	public void testGetTemp() {
-		truck = new RefridgeratedTruck(100, 100, stock, 10);
+		truck = new RefrigeratedTruck(100, 100, stock, 10);
 		assertEquals(10, truck.getTemp());
 	}
 }
