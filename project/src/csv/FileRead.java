@@ -168,7 +168,7 @@ public class FileRead {
 			//If there is not an expected number of properties, an Item cannot be created and the CSV file must be incorrect.
 			if (numProperties == LENGTH_DRY_ITEM) {
 				return new Item(name, properties[0], properties[1], properties[2], properties[3]);
-			} else if (numProperties = LENGTH_COLD_ITEM) {
+			} else if (numProperties == LENGTH_COLD_ITEM) {
 				return new Item(name, properties[0], properties[1], properties[2], properties[3], properties[4]);
 			} else {
 				throw new CSVFormatException("Incorrect number of item properties!");

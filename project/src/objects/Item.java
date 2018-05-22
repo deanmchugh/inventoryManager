@@ -1,5 +1,7 @@
 package objects;
 
+import exceptions.StockException;
+
 /**
  * Class to build an Item
  * @author Dean McHugh
@@ -48,7 +50,7 @@ public class Item {
 		setReorderAmount(reorderAmount);
 	}
 	
-	private void setTemp(int temp) StockException {
+	private void setTemp(int temp) throws StockException {
 		if(temp <= 0) {
 			throw new StockException("Temp must be higher then 0");
 		}

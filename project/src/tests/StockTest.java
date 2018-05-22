@@ -147,7 +147,7 @@ public class StockTest {
 	 * Cannot get minimum required temperature of purely non-controlled Items
 	 */
 	@Test (expected = StockException.class)
-	public void getTempNotControlled() throws StockException(){
+	public void getTempNotControlled() throws StockException {
 		apple = new Item("apple", 1, 1, 1, 1);
 		banana = new Item("banana", 1, 1, 1, 1);
 		fruits = new Stock();
@@ -186,7 +186,7 @@ public class StockTest {
 	 */
 	@Test
 	public void iterateItems() {
-		String fruitType = "";
+		String fruitNames = "";
 		
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);
@@ -207,7 +207,7 @@ public class StockTest {
 	 */
 	@Test
 	public void iterateAlphabetically() {
-		String fruitType = "";
+		String fruitNames = "";
 		
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);

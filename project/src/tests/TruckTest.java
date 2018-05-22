@@ -7,6 +7,7 @@ import delivery.OrdinaryTruck;
 import delivery.RefridgeratedTruck;
 import delivery.Truck;
 import objects.Stock;
+import exceptions.DeliveryException;
 
 /**
  * A series of tests for the truck class
