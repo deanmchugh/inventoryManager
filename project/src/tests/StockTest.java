@@ -23,7 +23,7 @@ public class StockTest {
 	 * Stock class depends on Item class, so Item class must be complete
 	 */
 	@Test
-	public void createStock() {
+	public void createStock() throws StockException {
 		fruits = new Stock();
 		apple = new Item("apple", 1, 1, 1, 1, -10);
 		banana = new Item("banana", 1, 1, 1, 1, 10);
@@ -33,7 +33,7 @@ public class StockTest {
 	 * Modifying quantity of Item not in Stock adds Item to Stock
 	 */
 	@Test
-	public void addNewItem() {
+	public void addNewItem() throws StockException {
 		fruits.modifyQuantity(apple, 5);
 		assertEquals(5, fruits.getQuantity(apple));
 	}
@@ -42,7 +42,7 @@ public class StockTest {
 	 * Check whether Item exists in Stock
 	 */
 	@Test
-	public void itemPresent() {
+	public void itemPresent() throws StockException {
 		assertTrue(fruits.itemInStock(apple));
 	}
 	
@@ -50,7 +50,7 @@ public class StockTest {
 	 * Check whether Item does not exist in Stock
 	 */
 	@Test
-	public void itemNotPresent() {
+	public void itemNotPresent() throws StockException {
 		assertFalse(fruits.itemInStock(banana));
 	}
 	
@@ -58,7 +58,7 @@ public class StockTest {
 	 * Adds additional quantity to Item already in Stock
 	 */
 	@Test
-	public void addToExistingItem() {
+	public void addToExistingItem() throws StockException {
 		fruits.modifyQuantity(apple, 5);
 		assertEquals(10, fruits.getQuantity(apple));
 	}
@@ -67,7 +67,7 @@ public class StockTest {
 	 * Removes quantity from Item already in Stock
 	 */
 	@Test 
-	public void removeFromExistingItem() {
+	public void removeFromExistingItem() throws StockException {
 		fruits.modifyQuantity(apple, -5);
 		assertEquals(5, fruits.getQuantity(apple));
 	}
@@ -76,7 +76,7 @@ public class StockTest {
 	 * Removing an Item to zero quantity does not remove Item object from Stock
 	 */
 	@Test
-	public void removeToZero() {
+	public void removeToZero() throws StockException {
 		fruits.modifyQuantity(apple, -5);
 		assertEquals(0, fruits.getQuantity(apple));
 	}
@@ -103,7 +103,7 @@ public class StockTest {
 	 * Gets quantity of all Items in Stock
 	 */
 	@Test
-	public void getTotalQuantity() {
+	public void getTotalQuantity() throws StockException {
 		// Adds banana to fruits with a quantity of 1
 		fruits.modifyQuantity(banana, 1);
 		// Apple quantity should previously be 5
@@ -114,7 +114,7 @@ public class StockTest {
 	 * When no Items are in Stock, quantity should still exist
 	 */
 	@Test
-	public void getEmptyQuantity() {
+	public void getEmptyQuantity() throws StockException {
 		fruits = new Stock();
 		assertEquals(0, fruits.getTotalQuantity());
 	}
@@ -123,7 +123,7 @@ public class StockTest {
 	 * Checks whether any Items in Stock are temperature controlled
 	 */
 	@Test
-	public void hasTempRequirement() {
+	public void hasTempRequirement() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		fruits.modifyQuantity(apple, 10);
 		assertTrue(fruits.needsTempControl());
@@ -133,7 +133,7 @@ public class StockTest {
 	 * Gets minimum required temperature of all Items in Stock
 	 */
 	@Test
-	public void getMinTemp() {
+	public void getMinTemp() throws StockException {
 		apple = new Item("apple", 1, 1, 1, 1, -10);
 		banana = new Item("banana", 1, 1, 1, 1, 5);
 		fruits = new Stock();
@@ -162,7 +162,7 @@ public class StockTest {
 	 * Lowest temperature Items removed first
 	 */
 	@Test
-	public void takeSomeStock() {
+	public void takeSomeStock() throws StockException {
 		Stock fruitBasket;
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);
@@ -185,7 +185,7 @@ public class StockTest {
 	 * Iterates over Items in Stock to print names
 	 */
 	@Test
-	public void iterateItems() {
+	public void iterateItems() throws StockException {
 		String fruitNames = "";
 		
 		apple = new Item("apple", 1, 2, 3, 4, 5);
@@ -206,7 +206,7 @@ public class StockTest {
 	 * Must iterate alphabetically
 	 */
 	@Test
-	public void iterateAlphabetically() {
+	public void iterateAlphabetically() throws StockException {
 		String fruitNames = "";
 		
 		apple = new Item("apple", 1, 2, 3, 4, 5);

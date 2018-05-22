@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import exceptions.StockException;
 import objects.*;
 
 /**
@@ -53,7 +55,7 @@ public class StoreTest {
 	 * Checks inventory upon creation is an empty stock object
 	 */
 	@Test
-	public void startingInventory() {
+	public void startingInventory() throws StockException {
 		assertEquals(new Stock(), store.getInventory());
 	}
 	
@@ -61,7 +63,7 @@ public class StoreTest {
 	 * Sells an item, quantity in inventory should be reduced
 	 */
 	@Test
-	public void sellItemReduceQauntity() {
+	public void sellItemReduceQauntity() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4); //When there are 3 or fewer apples, 4 will be ordered
 		store.addToInventory(apple, 5); //Brings apple quantity to 5
 		store.sellItem(apple, 1);		//Brings apple quantiy to 4
@@ -83,7 +85,7 @@ public class StoreTest {
 	 * Neither capital nor inventory should change
 	 */
 	@Test
-	public void orderItem() {
+	public void orderItem() throws StockException {
 		store.orderItem(apple, 6);
 		assertEquals(100002, store.getCapitalDollars());
 		assertEquals(0, store.getCapitalCents());
@@ -94,7 +96,7 @@ public class StoreTest {
 	 * Items ordered must be added automatically to order list
 	 */
 	@Test
-	public void getStockOrder() {
+	public void getStockOrder() throws StockException {
 		expectedOrderList = new Stock();
 		expectedOrderList.modifyQuantity(apple, 6);
 		assertEquals(expectedOrderList, store.getOrderList());
@@ -104,7 +106,7 @@ public class StoreTest {
 	 * Sell item to below re-order point
 	 */
 	@Test
-	public void automaticOrder() {
+	public void automaticOrder() throws StockException {
 		store.sellItem(apple, 1); //Brings apple quantity to 3
 		expectedOrderList.modifyQuantity(apple, 4); //4 additional apples will be ordered
 		assertEquals(expectedOrderList, store.getOrderList());

@@ -3,7 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import delivery.RefridgeratedTruck;
+import delivery.RefrigeratedTruck;
 import exceptions.StockException;
 import objects.Item;
 
@@ -19,7 +19,7 @@ public class ItemTest {
 	 * Construction of item with no temperature control
 	 */
 	@Test
-	public void constructItem() {
+	public void constructItem() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 	}
 	
@@ -27,7 +27,7 @@ public class ItemTest {
 	 * Construction of item with temperature control
 	 */
 	@Test
-	public void constructControlledItem() {
+	public void constructControlledItem() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 	}
 	
@@ -35,7 +35,7 @@ public class ItemTest {
 	 * Getting purchase cost of Item
 	 */
 	@Test
-	public void getCost() {
+	public void getCost() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(1, apple.getCost());
 	}
@@ -101,7 +101,7 @@ public class ItemTest {
 	 * Getting name
 	 */
 	@Test
-	public void getName() {
+	public void getName() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals("apple", apple.getName());
 	}
@@ -110,7 +110,7 @@ public class ItemTest {
 	 * Getting sell price
 	 */
 	@Test
-	public void getPrice() {
+	public void getPrice() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(2, apple.getSellPrice());
 	}
@@ -119,7 +119,7 @@ public class ItemTest {
 	 * Getting re-order point
 	 */
 	@Test
-	public void getReorderPoint() {
+	public void getReorderPoint() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(3, apple.getReorderPoint());
 	}
@@ -128,7 +128,7 @@ public class ItemTest {
 	 * Getting re-order amount
 	 */
 	@Test
-	public void getReorderAmount() {
+	public void getReorderAmount() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(4, apple.getReorderAmount());
 	}
@@ -137,7 +137,7 @@ public class ItemTest {
 	 * Checking whether Item is temperature controlled
 	 */
 	@Test
-	public void testTemperature() {
+	public void testTemperature() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertFalse(apple.isTempControlled());
 	}
@@ -146,7 +146,7 @@ public class ItemTest {
 	 * Getting maximum temperature
 	 */
 	@Test
-	public void getTemp() {
+	public void getTemp() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		assertEquals(5, apple.getTemp());
 	}

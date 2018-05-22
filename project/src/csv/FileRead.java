@@ -83,7 +83,7 @@ public class FileRead {
 						 String truckType = line.substring(1);
 						 currentStock = new Stock();
 						 if (truckType == "Refrigerated") {
-							 currentTruck = new RefridgeratedTruck();
+							 currentTruck = new RefrigeratedTruck();
 						 } else {
 							 currentTruck = new OrdinaryTruck();
 						 }

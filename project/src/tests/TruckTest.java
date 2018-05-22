@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import delivery.OrdinaryTruck;
-import delivery.RefridgeratedTruck;
+import delivery.RefrigeratedTruck;
 import delivery.Truck;
 import objects.Stock;
 import exceptions.DeliveryException;
