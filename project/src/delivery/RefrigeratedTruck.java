@@ -4,7 +4,7 @@ import exceptions.DeliveryException;
 import objects.Stock;
 
 /**
- * Class to create a RefridgeratedTruck object that contains Stock at a specified temperature at a cost.
+ * Class to create a RefrigeratedTruck object that contains Stock at a specified temperature at a cost.
  * @author Tim
  */
 public class RefrigeratedTruck extends Truck {
@@ -20,7 +20,7 @@ public class RefrigeratedTruck extends Truck {
 	/**
 	 * Constructor for RefrigeratedTruck. Stores contents at a set temperature, and calculates cost to use Truck.
 	 * @param contents Stock object to represent the contents of the Truck.
-	 * @throws DeliveryException Throws an exception when contents is null or temperature is out of bounds.
+	 * @throws DeliveryException Throws an exception when contents is null, temperature is out of bounds, or use of a RefrigeratedTruck is not needed.
 	 */
 	public RefrigeratedTruck(Stock contents) throws DeliveryException {
 		super(contents);
