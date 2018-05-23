@@ -4,41 +4,61 @@ import exceptions.DeliveryException;
 import objects.Stock;
 
 /**
- * 
+ * Class to create a RefridgeratedTruck object that contains Stock at a specified temperature at a cost.
  * @author Tim
  */
 public class RefrigeratedTruck extends Truck {
 
 	private static final int MIN_TEMP = -20;
 	private static final int MAX_TEMP = 10;
+	private static final int CAPACITY = 800;
 	
+	private double cost;
 	private int temperature;
 	
+
 	/**
-	 * Constructs a Truck object to contain a Stock object for a price, with a set temperature.
-	 * @param cost Float value of the cost to hire the truck in dollars.
-	 * @param capacity Integer value of the maximum number of items.
-	 * @param contents A Stock object containing the Items and quantity of Items to be transported.
-	 * @param temperature An Integer value of the set temperature of the Truck.
-	 * @throws DeliveryException Throws an exception with a message if inputs are out of defined bounds.
-	 * @author Tim
+	 * Constructor for Refrigerated Truck. Stores contents at a set temperature, and calculates cost to use Truck.
+	 * @param contents Stock object to represent the contents of the Truck.
+	 * @param temperature Set temperature of Truck, -20 <=temperature <= 10
+	 * @throws DeliveryException Throws an exception when contents is null or temperature is out of bounds.
 	 */
-	public RefrigeratedTruck(float cost, int capacity, Stock contents, int temperature) throws DeliveryException {
-		super(cost, capacity, contents);
+	public RefrigeratedTruck(Stock contents, int temperature) throws DeliveryException {
+		super(contents);
 		if (temperature < MIN_TEMP || temperature > MAX_TEMP) {
 			throw new DeliveryException("Temperature not within bounds!");
 		}
 		this.temperature = temperature;
+		
+		//Calculates cost as a function of temperature, and rounds to the nearest cent.
+		this.cost = 900.0 + 200.0 * Math.pow(0.7, temperature / 5.0);
+		this.cost = (double)Math.round(this.cost * 100d)/100d;
 	}
 
+	
 	/**
-	 * Getter method for the temperature of the truck.
-	 * @return The integer temperature of the Truck.
-	 * @author Tim
+	 * Getter method for set temperature of Truck.
+	 * @return Integer temperature of Truck.
 	 */
-	@Override
 	public int getTemp() {
 		return this.temperature;
 	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public double getCost() {
+		return this.cost;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getCargoCap() {
+		return CAPACITY;
+	}
+
 	
 }
