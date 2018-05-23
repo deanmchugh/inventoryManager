@@ -61,4 +61,12 @@ public abstract class Truck {
 	 */
 	abstract public int getTemp() throws DeliveryException;
 
+	
+	/**
+	 * Describes the type of Truck.
+	 * @return A string containing the class name of the Truck.
+	 * @author Tim
+	 */
+	abstract public String getType();
+	
 }

@@ -12,6 +12,7 @@ public class RefrigeratedTruck extends Truck {
 	private static final int MIN_TEMP = -20;
 	private static final int MAX_TEMP = 10;
 	private static final int CAPACITY = 800;
+	private static final String TYPE = "RefrigeratedTruck";
 	
 	private double cost;
 	private int temperature;
@@ -62,6 +63,15 @@ public class RefrigeratedTruck extends Truck {
 	 */
 	public int getCargoCap() {
 		return CAPACITY;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getType() {
+		return TYPE;
 	}
 
 	

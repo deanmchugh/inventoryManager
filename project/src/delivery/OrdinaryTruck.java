@@ -10,6 +10,7 @@ import objects.Stock;
 public class OrdinaryTruck extends Truck {
 
 	private static final int CAPACITY = 1000;
+	private static final String TYPE = "OrdinaryTruck";
 	
 	private double cost;
 	
@@ -55,6 +56,15 @@ public class OrdinaryTruck extends Truck {
 	 */
 	public int getCargoCap() {
 		return CAPACITY;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getType() {
+		return TYPE;
 	}
 
 }

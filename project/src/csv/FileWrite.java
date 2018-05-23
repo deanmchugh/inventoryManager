@@ -35,7 +35,7 @@ public class FileWrite {
 			
 			for (Truck truck : shippingManifest) {
 				writer.append(NEW_TRUCK_SYM + truck.getType() + NEW_LINE_SYM);
-				writeContents(truck.getContents());
+				writeContents(truck.getCargo());
 			}
 		} catch (Exception e) {
 			throw new CSVFormatException("Error occured writing file!");
