@@ -6,6 +6,7 @@ import java.util.List;
 import objects.*;
 import delivery.*;
 import exceptions.CSVFormatException;
+import exceptions.DeliveryException;
 
 /**
  * Class containing functions related to writing data to a .csv file
@@ -44,6 +45,7 @@ public class FileRead {
 					itemList.modifyQuantity(createItem(line), 1);
 					line = reader.readLine();
 				}
+				
 			} catch (FileNotFoundException e) {
 				throw new CSVFormatException("File at\n" + fileName + "\nNot found!");
 			} catch (IOException e){
@@ -66,36 +68,37 @@ public class FileRead {
 		public static Manifest readManifest() throws CSVFormatException {
 			String fileName = FILE_PATH + "manifest.csv";
 			Manifest manifest = new Manifest();
-			Truck currentTruck = null;
+			Truck currentTruck;
 			Stock currentStock;
+			String currentTruckType = "";
 			
 			try {
 				reader = new BufferedReader(new FileReader(fileName));
 				String line = reader.readLine();
 				//Reads to end of file, either creating new Trucks or adding Items to Stock as necessary
-				//Every time a new Truck is created, the previous Truck has the accumulated Stock added, and the Stock is cleared
+				//Every time a new Truck is reached in the file, the previous truck is created with Stock up to that line
+				//Created trucks are immediately added to manifest
 				while (line != null) {
-					 if (line.contains(TRUCK_PREFIX)) { //Line contains type of truck, after first character
-						 if (currentTruck != null) {
-							 //TODO Make sure method name is correct
-							 currentTruck.putStock(currentStock);
-						 }
-						 String truckType = line.substring(1);
-						 currentStock = new Stock();
-						 if (truckType == "Refrigerated") {
-							 currentTruck = new RefrigeratedTruck();
-						 } else {
-							 currentTruck = new OrdinaryTruck();
-						 }
-					 } else { //Line contains Item name and quantity, comma seperated
-						 String itemName = line.split(VALUE_SEPERATOR)[0];
-						 int itemQuantity = Integer.parseInt(line.split(VALUE_SEPERATOR)[1]);
-						 Item currentItem = getItem(itemName);
-						 currentStock.modifyQuantity(currentItem, itemQuantity);
-					 }
+					
+					if (line.contains(TRUCK_PREFIX)) {
+						if (currentTruckType != "") { //Cannot create first Truck until currentStock filled
+							manifest.addTruck(createTruck(currentTruckType, currentStock));
+						}
+						//Reset stock and truck type for new truck
+						currentTruckType = line.substring(1);
+						currentStock = new Stock();
+					} else { //Line contains Item details
+						String itemName = line.split(VALUE_SEPERATOR)[0];
+						int itemQuantity = Integer.parseInt(line.split(VALUE_SEPERATOR)[1]);
+						Item item = getItem(itemName);
+						currentStock.modifyQuantity(item, itemQuantity);
+					}
+					
+					line = reader.readLine();
 				}
-				//Final truck is loaded with stock
-				currentTruck.putStock(currentStock);
+				
+				//End of file reached, add final truck to manifest
+				manifest.addTruck(createTruck(currentTruckType, currentStock));
 				
 			} catch (FileNotFoundException e) {
 				throw new CSVFormatException("File at \n" + fileName + "/nNot found!");
@@ -104,7 +107,6 @@ public class FileRead {
 			}
 			
 			closeReader();
-			//TODO - Possible generate manifest data such as temperature/pricing?
 			return manifest;
 		}
 		
@@ -203,6 +205,27 @@ public class FileRead {
 				}
 			}
 			return null;
+		}
+		
+		
+		/**
+		 * Private helper method to create either a RefrigeratedTruck or OrdinaryTruck depending on input string.
+		 * @param truckType String containing either "Ordinary" or "Refrigerated".
+		 * @param contents Stock object to reside in Truck.
+		 * @return RefrigeratedTruck or OrdinaryTruck with contents inside.
+		 * @throws DeliveryException Exception thrown when type of truck not recognised.
+		 * @author Tim
+		 */
+		private static Truck createTruck(String truckType, Stock contents) throws DeliveryException{
+			Truck newTruck;
+			if (truckType == "Ordinary"){ //Stock generated, place in truck, add to manifest
+				newTruck = new OrdinaryTruck(contents);
+			} else if (truckType == "Refrigerated"){
+				newTruck = new RefrigeratedTruck(contents);
+			} else {
+				throw new DeliveryException("Manifest contains unknown type of truck!");
+			}
+			return newTruck;
 		}
 		
 }
