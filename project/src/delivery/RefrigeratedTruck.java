@@ -18,21 +18,25 @@ public class RefrigeratedTruck extends Truck {
 	
 
 	/**
-	 * Constructor for Refrigerated Truck. Stores contents at a set temperature, and calculates cost to use Truck.
+	 * Constructor for RefrigeratedTruck. Stores contents at a set temperature, and calculates cost to use Truck.
 	 * @param contents Stock object to represent the contents of the Truck.
-	 * @param temperature Set temperature of Truck, -20 <=temperature <= 10
 	 * @throws DeliveryException Throws an exception when contents is null or temperature is out of bounds.
 	 */
-	public RefrigeratedTruck(Stock contents, int temperature) throws DeliveryException {
+	public RefrigeratedTruck(Stock contents) throws DeliveryException {
 		super(contents);
+		
+		//Find minimum temperature needed of Items in contents, throws exception if temperature out of bounds or if no Items are temp controlled.
+		if (!contents.needsTempControl()) {
+			throw new DeliveryException("Using a refrigerated truck for non-controlled items!");
+		}
+		temperature = contents.getMinTemp();
 		if (temperature < MIN_TEMP || temperature > MAX_TEMP) {
 			throw new DeliveryException("Temperature not within bounds!");
 		}
-		this.temperature = temperature;
 		
 		//Calculates cost as a function of temperature, and rounds to the nearest cent.
-		this.cost = 900.0 + 200.0 * Math.pow(0.7, temperature / 5.0);
-		this.cost = (double)Math.round(this.cost * 100d)/100d;
+		cost = 900.0 + 200.0 * Math.pow(0.7, temperature / 5.0);
+		cost = (double)Math.round(cost * 100d)/100d;
 	}
 
 	
