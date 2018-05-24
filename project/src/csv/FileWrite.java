@@ -14,7 +14,7 @@ import delivery.*;
 public class FileWrite {
 	
 	//TODO: Update File path/name
-	private static String FILE_NAME = "../Sample-Files/manifest.csv";
+	private static String FILE_NAME = "../../Sample-Files/manifest.csv";
 	private static String NEW_TRUCK_SYM = ">";
 	private static String NEW_LINE_SYM = "\n";
 	private static String VALUE_SEPERATOR = ",";
@@ -38,13 +38,13 @@ public class FileWrite {
 				writeContents(truck.getCargo());
 			}
 		} catch (Exception e) {
-			throw new CSVFormatException("Error occured writing file!");
+			throw new CSVFormatException("Error occured writing Manifest!");
 		}
 		
 		try {
 			writer.close();
 		} catch (Exception e) {
-			throw new CSVFormatException("Error occured closing file!");
+			throw new CSVFormatException("Error occured closing Manifest file after writing!");
 		}
 	}
 	
@@ -54,10 +54,14 @@ public class FileWrite {
 	 * @param contents A Stock object containing Items and quantity of Items aboard a single truck.
 	 * @author Tim
 	 */
-	private static void writeContents(Stock contents) {
-		for (Item item : contents) {
-			writer.append(item.getName() + VALUE_SEPERATOR + 
-					Integer.toString(contents.getQuantity(item)) + NEW_LINE_SYM);
+	private static void writeContents(Stock contents) throws CSVFormatException {
+		try {
+			for (Item item : contents) {
+				writer.append(item.getName() + VALUE_SEPERATOR + 
+						Integer.toString(contents.getQuantity(item)) + NEW_LINE_SYM);
+			} 
+		} catch (Exception e) {
+			throw new CSVFormatException("Could not write an Item to Manifest file!");
 		}
 	}
 	

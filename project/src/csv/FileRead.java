@@ -1,12 +1,10 @@
 package csv;
 
 import java.io.*;
-import java.util.List;
 
 import objects.*;
 import delivery.*;
-import exceptions.CSVFormatException;
-import exceptions.DeliveryException;
+import exceptions.*;
 
 /**
  * Class containing functions related to writing data to a .csv file
@@ -14,7 +12,7 @@ import exceptions.DeliveryException;
  */
 public class FileRead {
 
-		private static final String FILE_PATH = "../Sample-Files/";
+		private static final String FILE_PATH = "../../Sample-Files/";
 		private static final String VALUE_SEPERATOR = ",";
 		private static final int LENGTH_DRY_ITEM = 4;
 		private static final int LENGTH_COLD_ITEM = 5;
@@ -30,10 +28,11 @@ public class FileRead {
 		 * Each item will have an arbitrary quantity of 1.
 		 * The returned Stock object is also stored within a private static variable accessible to all methods in this class.
 		 * @author Tim
-		 * @return Stock object containing 1 of every Item in the item_properties.csv file.
+		 * @return Stock object containing every Item in the item_properties.csv file, with a quantity equal to each Item's reorder amount.
 		 * @throws CSVFormatException 
+		 * @throws StockException 
 		 */
-		public static Stock readProperties() throws CSVFormatException {
+		public static Stock readProperties() throws CSVFormatException, StockException {
 			String fileName = FILE_PATH + "item_properties.csv";
 			itemList = new Stock();
 			
@@ -42,7 +41,8 @@ public class FileRead {
 				
 				String line = reader.readLine();
 				while (line != null) {
-					itemList.modifyQuantity(createItem(line), 1);
+					Item newItem = createItem(line);
+					itemList.modifyQuantity(newItem, newItem.getReorderAmount());
 					line = reader.readLine();
 				}
 				
@@ -64,12 +64,13 @@ public class FileRead {
 		 * @author Tim
 		 * @return A Manifest object containing a number of Trucks as specified by the manifest file.
 		 * @throws CSVFormatException Exception thrown when the FileReader has trouble opening, closing, or reading the desired file.
+		 * @throws DeliveryException 
+		 * @throws StockException 
 		 */
-		public static Manifest readManifest() throws CSVFormatException {
+		public static Manifest readManifest() throws CSVFormatException, DeliveryException, StockException {
 			String fileName = FILE_PATH + "manifest.csv";
 			Manifest manifest = new Manifest();
-			Truck currentTruck;
-			Stock currentStock;
+			Stock currentStock = null;
 			String currentTruckType = "";
 			
 			try {
@@ -116,8 +117,9 @@ public class FileRead {
 		 * @throws CSVFormatException Exception caused by file not being found, or error in reading/closing file.
 		 * @return Stock object containing 
 		 * @author Tim
+		 * @throws StockException 
 		 */
-		public static Stock readSalesLog() throws CSVFormatException {
+		public static Stock readSalesLog() throws CSVFormatException, StockException {
 			String fileName = FILE_PATH + "sales_log_" + Integer.toString(salesLogNum) + ".csv";
 			String itemName;
 			int itemQuantity;
@@ -154,8 +156,9 @@ public class FileRead {
 		 * @param line String containing entire contents of one line of a CSV file, including commas, but without newline characters
 		 * @return An Item correlating to the properties contained within line. May be either temperature-controlled or dry Item.
 		 * @throws CSVFormatException Exception caused by incorrect number of properties required to create Item.
+		 * @throws StockException 
 		 */
-		private static Item createItem(String line) throws CSVFormatException {
+		private static Item createItem(String line) throws CSVFormatException, StockException {
 			int numProperties = line.split(VALUE_SEPERATOR).length;
 			String name = line.split(VALUE_SEPERATOR)[0];
 			
@@ -215,8 +218,9 @@ public class FileRead {
 		 * @return RefrigeratedTruck or OrdinaryTruck with contents inside.
 		 * @throws DeliveryException Exception thrown when type of truck not recognised.
 		 * @author Tim
+		 * @throws StockException 
 		 */
-		private static Truck createTruck(String truckType, Stock contents) throws DeliveryException{
+		private static Truck createTruck(String truckType, Stock contents) throws DeliveryException, StockException{
 			Truck newTruck;
 			if (truckType == "Ordinary"){ //Stock generated, place in truck, add to manifest
 				newTruck = new OrdinaryTruck(contents);

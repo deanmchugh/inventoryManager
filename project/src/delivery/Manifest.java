@@ -3,6 +3,9 @@ package delivery;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import objects.Item;
+import objects.Stock;
+
 /**
  * Stores a collection of Truck objects in an iterable format.
  * @author Tim
@@ -39,6 +42,19 @@ public class Manifest implements Iterable<Truck> {
 	@Override
 	public Iterator<Truck> iterator() {
 		return truckList.iterator();
+	}
+	
+	public double getTotalCost() {
+		double cost = 0;
+		for (Truck truck : truckList) {
+			Stock contents = truck.getCargo();
+			for (Item item : contents) {
+				cost += item.getCost() * contents.getQuantity(item);
+			}
+			cost += truck.getCost();
+		}
+		//TODO: Round cost to 2 decimal places?
+		return cost;
 	}
 	
 }
