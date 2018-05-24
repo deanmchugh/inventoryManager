@@ -7,7 +7,7 @@ import objects.Stock;
  * Abstract class that defines the basic operations of a Truck, an object that stores a singular Stock object.
  * Contains a constructor method to store contents, and a getter method to retrieve them.
  * Abstract methods are implemented different in child classes.
- * @author Plenco
+ * @author Tim
  */
 public abstract class Truck {
 

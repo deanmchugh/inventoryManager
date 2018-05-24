@@ -1,48 +1,42 @@
 package tests;
 
 import static org.junit.Assert.*;
-import org.junit.Test;
+import org.junit.*;
 
-import delivery.RefrigeratedTruck;
 import exceptions.StockException;
 import objects.Item;
 
 /**
  * A series of tests to assess the capability of the Item class.
+ * The Item class must have two constructors, one for dry items, and one for temperature-controlled items.
  * @author Tim
  */
 public class ItemTest {
 	
 	private Item apple;
+	private Item banana;	
+
 	
 	/**
-	 * Construction of item with no temperature control 
-	 * @throws StockException 
+	 *Creates both a dry and a temperature-controlled Item for use
+	 * in tests. Acts as a pseudo-test for Item constructors.
 	 */
-	@Test
-	public void constructItem() throws StockException {
+	@Before
+	public void createDryItem() throws StockException{
 		apple = new Item("apple", 1, 2, 3, 4);
+		banana = new Item("banana", 6, 7, 8, 9, 10);
 	}
 	
-	/**
-	 * Construction of item with temperature control
-	 * @throws StockException 
-	 */
-	@Test
-	public void constructControlledItem() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4, 5);
-	}
-	
+
 	/**
 	 * Getting purchase cost of Item
-	 * @throws StockException 
 	 */
 	@Test
 	public void getCost() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(1, apple.getCost());
 	}
 	
+
 	/**
 	 * Can't construct Item with zero cost
 	 */
@@ -51,6 +45,7 @@ public class ItemTest {
 		apple = new Item("apple", 0, 2, 3, 4);
 	}
 	
+
 	/**
 	 * Can't construct Item with negative cost
 	 */
@@ -59,6 +54,7 @@ public class ItemTest {
 		apple = new Item("apple", -1, 2, 3, 4);
 	}
 	
+
 	/**
 	 * Can't construct Item with zero sell price
 	 */
@@ -67,6 +63,7 @@ public class ItemTest {
 		apple = new Item("apple", 1, 0, 3, 4);
 	}
 	
+
 	/**
 	 * Can't construct Item with negative sell price
 	 */
@@ -75,6 +72,7 @@ public class ItemTest {
 		apple = new Item("apple", 1, -2, 3, 4);
 	}
 	
+
 	/**
 	 * Can't construct Item with negative re-order point
 	 */
@@ -83,6 +81,7 @@ public class ItemTest {
 		apple = new Item("apple", 1, 2, -3, 4);
 	}
 	
+
 	/**
 	 * Can't construct Item with zero re-order amount
 	 */
@@ -91,6 +90,7 @@ public class ItemTest {
 		apple = new Item("apple", 1, 2, 3, 0);
 	}
 	
+
 	/**
 	 * Can't construct Item with negative re-order amount
 	 */
@@ -102,71 +102,127 @@ public class ItemTest {
 	
 	/**
 	 * Getting name
-	 * @throws StockException 
 	 */
 	@Test
 	public void getName() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals("apple", apple.getName());
 	}
 	
 	/**
 	 * Getting sell price
-	 * @throws StockException 
 	 */
 	@Test
 	public void getPrice() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(2, apple.getSellPrice());
 	}
 	
 	/**
 	 * Getting re-order point
-	 * @throws StockException 
 	 */
 	@Test
 	public void getReorderPoint() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(3, apple.getReorderPoint());
 	}
 	
 	/**
 	 * Getting re-order amount
-	 * @throws StockException 
 	 */
 	@Test
 	public void getReorderAmount() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(4, apple.getReorderAmount());
 	}
 	
+
 	/**
 	 * Checking whether Item is temperature controlled
-	 * @throws StockException 
 	 */
 	@Test
-	public void testTemperature() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
+	public void testTemperatureDry() throws StockException {
 		assertFalse(apple.isTempControlled());
 	}
 	
+
+	/**
+	 * Checking whether Item is temperature controlled
+	 */
+	@Test
+	public void testTemperatureCold() throws StockException {
+		assertTrue(banana.isTempControlled());
+	}
+
+
 	/**
 	 * Getting maximum temperature
-	 * @throws StockException 
 	 */
 	@Test
 	public void getTemp() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4, 5);
-		assertEquals(5, apple.getTemp());
+		assertEquals(10, banana.getTemp());
 	}
 	
+
 	/**
 	 * Can't get maximum temperature of a dry item
 	 */
 	@Test (expected = StockException.class)
 	public void noTemp() throws StockException {
-		apple = new Item("apple", 1, 2, 3, 4);
-		assertEquals(11, apple.getTemp());
+		apple.getTemp();
 	}
 	
+	
+	/**
+	 * Compares dry items, should compare by name alphabetically
+	 */
+	@Test
+	public void compareItemsBothDry() throws StockException{
+		banana = new Item("banana", 6, 7, 8, 9);
+
+		assertTrue(apple.compareTo(banana) < 0);
+		assertTrue(banana.compareTo(apple) > 0);	
+	}
+
+
+	/**
+	 * Compares dry items with identical names
+	 */
+	@Test
+	public void compareItemsSameNameBothDry() throws StockException{
+		banana = new Item("apple", 6, 7, 8, 9);
+
+		assertTrue(apple.compareTo(banana) == 0);	
+	}
+
+
+
+	/**
+	 * Compares same temperature items with identical names
+	 */
+	@Test
+	public void compareItemsSameNameSameTemp() throws StockException{
+		apple = new Item("banana", 1, 2, 3, 4, 10);
+
+		assertTrue(apple.compareTo(banana) == 0);	
+	}
+
+
+	/**
+	 * Compares dry item with temp controlled item, temp controlled item should come first
+	 */
+	@Test
+	public void compareItemsOneDryOneCold(){
+		assertTrue(apple.compareTo(banana) > 0);
+		assertTrue(banana.compareTo(apple) < 0);	
+	}
+
+
+	/**
+	 * Compares cold items with different temperatures
+	 */
+	@Test
+	public void compareItemsBothCold() throws StockException{
+		apple = new Item("apple", 1, 2, 3, 4, 5);
+
+		assertTrue(apple.compareTo(banana) < 0);
+		assertTrue(banana.compareTo(apple) > 0);	
+	}
+
 }

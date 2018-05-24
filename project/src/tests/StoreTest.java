@@ -1,7 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
-import org.junit.Test;
+import org.junit.*;
 
 import exceptions.StockException;
 import objects.*;
@@ -14,109 +14,175 @@ import objects.*;
  */
 public class StoreTest {
 
-	private Store store;
-	private Item apple;
-	private Stock<Item> expectedOrderList;
+	private final double DELTA = 0.001d;
+	
+	private static Store store;
+	private static Item apple;
+	private static Stock nextOrder;
+	
+
+	/**
+	 * Sets up objects at start of 
+	 */
+	@BeforeClass
+	public static void getStore() throws StockException {
+		store = Store.getInstance();
+		apple = new Item("apple", 1, 2, 3, 4);
+		nextOrder = new Stock();
+	}
+
 	
 	/**
-	 * Creates singleton Store from global access point
+	 * Calls method to reset store to starting values.
+	 * Implicit test of reset() method, although this method should not be used
+	 * except for testing. This is needed due to the singleton nature of the Store
+	 * class and the unknown order of JUnit tests.
 	 */
-	@Test
-	public void constructStore() {
-		store = Store.getInstance();
+	@Before
+	public void resetStore(){
+		store.reset();
 	}
 	
+
 	/**
-	 * Gets starting capital of store (Dollars portion)
+	 * Gets starting capital of store
 	 */
 	@Test
 	public void startingCapital() {
-		store = Store.getInstance();
-		assertEquals(100000, store.getCapitalDollars());
+		assertEquals(100000d, store.getCapital(), DELTA);
 	}
 	
-	/**
-	 * Gets starting capital of store (Cents portion)
-	 */
-	@Test 
-	public void startingCents() {
-		store = Store.getInstance();
-		assertEquals(0, store.getCapitalCents());
-	}
 	
 	/**
 	 * Gives name to store
 	 */
 	@Test
 	public void nameStore() {
-		store = Store.getInstance();
 		store.setName("Market");
 		assertEquals("Market", store.getName());
 	}
+
 	
 	/**
 	 * Checks inventory upon creation is an empty stock object
 	 */
 	@Test
 	public void startingInventory() {
-		store = Store.getInstance();
-		assertEquals(new Stock<Item>(), store.getInventory());
+		assertEquals(0, store.getInventory().getTotalQuantity());
 	}
 	
+
+	/**
+	 * Add Item to store
+	 */
+	@Test
+	public void addItem() throws StockException {
+		store.addToInventory(apple, 10);
+		assertEquals(10, store.getQuantity(apple));
+	}
+
+
+
+	/**
+	 * Add extra quantity to existing Item
+	 */
+	@Test
+	public void increaseItemQuantity() throws StockException {
+		store.addToInventory(apple, 10);
+		store.addToInventory(apple, 15);
+		assertEquals(25, store.getQuantity(apple));
+	}	
+
+	
+	/**
+	 * Cannot increase an Item's quantity by a negative value
+	 */
+	@Test (expected = StockException.class)
+	public void increaseQuantityByNegative() throws StockException {
+		store.addToInventory(apple, -1);
+	}
+
+
 	/**
 	 * Sells an item, quantity in inventory should be reduced
-	 * @throws StockException 
 	 */
 	@Test
 	public void sellItemReduceQauntity() throws StockException {
-		store = Store.getInstance();
-		apple = new Item("apple", 1, 2, 3, 4, 0); //When there are 3 or fewer apples, 4 will be ordered
-		store.addToInventory(apple, 5); //Brings apple quantity to 5
-		store.sellItem(apple, 1);		//Brings apple quantity to 4
+		//When there are 3 or fewer apples, 4 will be ordered
+		store.addToInventory(apple, 10);
+		store.sellItem(apple, 1);
 		
-		assertEquals(4, store.getQuantity(apple));
+		assertEquals(9, store.getQuantity(apple));
 	}
+	
 	
 	/**
-	 * Item is sold in previous test, capital should increase
+	 * Attempts to sell more of an Item than Store contains 
+	 */
+	@Test (expected = StockException.class)
+	public void sellTooManyItems() throws StockException {
+		store.addToInventory(apple, 10);
+		store.sellItem(apple, 11);
+	}
+
+
+	/**
+	 * Attempts to sell negative amount of an Item
+	 */
+	@Test (expected = StockException.class)
+	public void sellNegativeQuantity() throws StockException {
+		store.addToInventory(apple, 10);
+		store.sellItem(apple, -1);
+	}
+
+
+	//TODO: Cannot sell Item not in Store
+
+
+	/**
+	 * Sells an Item, capital should increase
 	 */
 	@Test
-	public void sellItemIncreaseCapital() {
-		assertEquals(100002, store.getCapitalDollars());
-		assertEquals(0, store.getCapitalCents());
+	public void sellItemIncreaseCapital() throws StockException {
+		//N.B. Cost of an apple is $2.00
+		store.addToInventory(apple, 10);
+		store.sellItem(apple, 1);
+		assertEquals(100002.00d, store.getCapital(), DELTA);
 	}
+
 	
 	/**
-	 * Order an item by exporting to manifest
-	 * Neither capital nor inventory should change
+	 *Sells an item to re-orderpoint, Item should be added to next order
 	 */
 	@Test
-	public void orderItem() throws StockException {
-		store.orderItem(apple, 6);
-		assertEquals(100002, store.getCapitalDollars());
-		assertEquals(0, store.getCapitalCents());
-		assertEquals(4, store.getQuantity(apple));
+	public void sellBelowReorderPoint() throws StockException {
+		store.addToInventory(apple, 10);
+		store.sellItem(apple, 7);
+		nextOrder.modifyQuantity(apple, 4);
+		assertEquals(nextOrder.getTotalQuantity(), store.getOrderList().getTotalQuantity());
 	}
-	
+
+
+	//Send order to manifest
+	//Neither stock levels not capital should change
+
+
 	/**
-	 * Items ordered must be added automatically to order list
-	 * @throws StockException 
-	 */
+	 * Given a dollar value, reduce capital by this amount
+	 */	
 	@Test
-	public void getStockOrder() throws StockException {
-		expectedOrderList = new Stock<Item>();
-		expectedOrderList.add(apple, 6);
-		assertEquals(expectedOrderList, store.getOrderList());
+	public void reduceCapital() throws StockException {
+		store.reduceCapital(40000d);
+		assertEquals(60000d, store.getCapital(), DELTA);
 	}
-	
+
+
 	/**
-	 * Sell item to below re-order point
-	 */
-	@Test
-	public void automaticOrder() throws StockException {
-		store.sellItem(apple, 1); //Brings apple quantity to 3
-		expectedOrderList.modifyQuantity(apple, 4); //4 additional apples will be ordered
-		assertEquals(expectedOrderList, store.getOrderList());
+	 * Cannot reduce capital past zero
+	 */	
+	@Test (expected = StockException.class)
+	public void reduceCapitalToNegative() throws StockException {
+		store.reduceCapital(200000d);
 	}
-	
+
 }
