@@ -1,5 +1,9 @@
 package objects;
 
+import java.lang.reflect.Constructor;
+
+import exceptions.StockException;
+
 /**
  * Class to build an Item
  * @author Dean McHugh
@@ -12,10 +16,10 @@ public class Item {
 	private int price;
 	private int reorderPoint;
 	private int reorderAmount;
-	private int temp; 
+	private int temp = 0;
 	
 	/**
-	 * Constructor to instantiate an item with a temp
+	 * Constructor to instantiate an item
 	 * @param name
 	 * @param cost
 	 * @param price
@@ -23,73 +27,16 @@ public class Item {
 	 * @param reorderAmount
 	 * @param temp
 	 */
-	public Item(String name, int cost, int price, int reorderPoint, int reorderAmount, int temp) {
-		setName(name);
-		setCost(cost);
-		setPrice(price);
-		setReorderPoint(reorderPoint);
-		setReorderAmount(reorderAmount);
-		setTemp(temp);
-	}
-
-	/**
-	 * Constructor to instantiate an item witout temp
-	 * @param name
-	 * @param cost
-	 * @param price
-	 * @param reorderPoint
-	 * @param reorderAmount
-	 */
-	public Item(String name, int cost, int price, int reorderPoint, int reorderAmount) {
-		setName(name);
-		setCost(cost);
-		setPrice(price);
-		setReorderPoint(reorderPoint);
-		setReorderAmount(reorderAmount);
-	}
-	
-	private void setTemp(int temp) StockException {
-		if(temp <= 0) {
-			throw new StockException("Temp must be higher then 0");
-		}
-		this.temp = temp; 
-	}
-
-	private void setReorderAmount(int reorderAmount) throws StockException {
-		if(reorderAmount <= 0) {
-			throw new StockException("Reorder amount must be higher then 0");
-		}
-		this.reorderAmount = reorderAmount;
-	}
-
-	private void setReorderPoint(int reorderPoint) throws StockException {
-		if(reorderPoint <= 0) {
-			throw new StockException("Reorder point must be higher then 0");
-		}
-		this.reorderPoint = reorderPoint;
-	}
-
-	private void setPrice(int price) throws  StockException {
-		if(price <= 0) {
-			throw new StockException("Price must be higher then 0");
-		}
-		this.price = price;
-	}
-
-	private void setCost(int cost) throws StockException {
-		if(cost <= 0) {
-			throw new StockException("Cost must be higher then 0");
-		}
-		this.cost = cost;		
-	}
-
-	private void setName(String name) throws StockException{
-		if(name == null) {
-			throw new StockException("Item needs name");
-		}
+	public Item(String name, int cost, int price, int reorderPoint, int reorderAmount, int temp) throws StockException{
+		if(cost<=0||price<=0||reorderPoint<=0||reorderAmount<=0)
+			throw new StockException();
 		this.name = name;
-		
-	}
+		this.cost = cost;
+		this.price = price;
+		this.reorderPoint = reorderPoint;
+		this.reorderAmount = reorderAmount;
+		this.temp = temp;
+	}	
 	
 	/**
 	 * getter function to get item name
@@ -138,6 +85,4 @@ public class Item {
 	public int getTemp() {
 		return temp;
 	}
-	
-
 }

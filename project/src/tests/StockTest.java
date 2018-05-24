@@ -9,75 +9,100 @@ import exceptions.*;
  * A series of tests to assess the capability of the Stock class.
  * As Stock is a collection of Items, the Item class must be complete.
  * @author Tim
+ * @param <E>
  */
 public class StockTest {
 
 	private Item apple;
 	private Item banana;
-	private Stock fruits;
+	private Stock<Item> fruits;
 	
 
 	/**
 	 * Creates Stock object
 	 * Creates two Items to use in tests
 	 * Stock class depends on Item class, so Item class must be complete
+	 * @throws StockException 
 	 */
 	@Test
-	public void createStock() {
-		fruits = new Stock();
+	public void createStock() throws StockException {
+		fruits = new Stock<Item>();
 		apple = new Item("apple", 1, 1, 1, 1, -10);
 		banana = new Item("banana", 1, 1, 1, 1, 10);
 	}
 	
 	/**
 	 * Modifying quantity of Item not in Stock adds Item to Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void addNewItem() {
-		fruits.modifyQuantity(apple, 5);
+	public void addNewItem() throws StockException {
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits = new Stock<Item>();
+		fruits.add(apple, 5);
 		assertEquals(5, fruits.getQuantity(apple));
 	}
 	
 	/**
 	 * Check whether Item exists in Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void itemPresent() {
+	public void itemPresent() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
 		assertTrue(fruits.itemInStock(apple));
 	}
 	
 	/**
 	 * Check whether Item does not exist in Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void itemNotPresent() {
+	public void itemNotPresent() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
 		assertFalse(fruits.itemInStock(banana));
 	}
 	
 	/**
 	 * Adds additional quantity to Item already in Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void addToExistingItem() {
-		fruits.modifyQuantity(apple, 5);
+	public void addToExistingItem() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
+		fruits.add(apple, 5);
 		assertEquals(10, fruits.getQuantity(apple));
 	}
 	
 	/**
 	 * Removes quantity from Item already in Stock
+	 * @throws StockException 
 	 */
 	@Test 
-	public void removeFromExistingItem() {
-		fruits.modifyQuantity(apple, -5);
+	public void removeFromExistingItem() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 10);
+		fruits.remove(apple, 5);
 		assertEquals(5, fruits.getQuantity(apple));
 	}
 	
 	/**
 	 * Removing an Item to zero quantity does not remove Item object from Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void removeToZero() {
-		fruits.modifyQuantity(apple, -5);
+	public void removeToZero() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
+		fruits.remove(apple, 5);
 		assertEquals(0, fruits.getQuantity(apple));
 	}
 	/**
@@ -86,7 +111,8 @@ public class StockTest {
 	 */
 	@Test (expected = StockException.class)
 	public void removeFromNonExistingItem() throws StockException {
-		fruits.modifyQuantity(banana, -5);
+		fruits = new Stock<Item>();
+		fruits.remove(banana, 5);
 	}
 	
 	/**
@@ -95,18 +121,22 @@ public class StockTest {
 	 */
 	@Test (expected = StockException.class)
 	public void quantityToNegative() throws StockException {
-		//Attempts to bring apple quantity from 5 to -5
-		fruits.modifyQuantity(apple, -10);
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
+		fruits.remove(apple, 10);
 	}
 	
 	/**
 	 * Gets quantity of all Items in Stock
+	 * @throws StockException 
 	 */
 	@Test
-	public void getTotalQuantity() {
-		// Adds banana to fruits with a quantity of 1
-		fruits.modifyQuantity(banana, 1);
-		// Apple quantity should previously be 5
+	public void getTotalQuantity() throws StockException {
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 10);
+		fruits.add(apple, 5);
+		fruits.add(banana, 1);
 		assertEquals(6, fruits.getTotalQuantity());
 	}
 	
@@ -115,17 +145,19 @@ public class StockTest {
 	 */
 	@Test
 	public void getEmptyQuantity() {
-		fruits = new Stock();
+		fruits = new Stock<Item>();
 		assertEquals(0, fruits.getTotalQuantity());
 	}
 	
 	/**
 	 * Checks whether any Items in Stock are temperature controlled
+	 * @throws StockException 
 	 */
 	@Test
-	public void hasTempRequirement() {
+	public void hasTempRequirement() throws StockException {
+		fruits = new Stock<Item>();
 		apple = new Item("apple", 1, 2, 3, 4, 5);
-		fruits.modifyQuantity(apple, 10);
+		fruits.add(apple, 10);
 		assertTrue(fruits.needsTempControl());
 	}
 	
@@ -134,11 +166,11 @@ public class StockTest {
 	 */
 	@Test
 	public void getMinTemp() {
+		fruits = new Stock<Item>();
 		apple = new Item("apple", 1, 1, 1, 1, -10);
 		banana = new Item("banana", 1, 1, 1, 1, 5);
-		fruits = new Stock();
-		fruits.modifyQuantity(apple, 1);
-		fruits.modifyQuantity(banana, 1);
+		fruits.add(apple, 1);
+		fruits.add(banana, 1);
 		
 		assertEquals(-10, fruits.getMinTemp());
 	}
@@ -146,13 +178,13 @@ public class StockTest {
 	/**
 	 * Cannot get minimum required temperature of purely non-controlled Items
 	 */
-	@Test (expected = StockException.class)
+	@Test
 	public void getTempNotControlled() throws StockException(){
-		apple = new Item("apple", 1, 1, 1, 1);
-		banana = new Item("banana", 1, 1, 1, 1);
-		fruits = new Stock();
-		fruits.modifyQuantity(apple, 1);
-		fruits.modifyQuantity(banana, 1);
+		fruits = new Stock<Item>();
+		apple = new Item("apple", 1, 1, 1, 1, 0);
+		banana = new Item("banana", 1, 1, 1, 1, 0);
+		fruits.add(apple, 1);
+		fruits.add(banana, 1);
 		
 		fruits.getMinTemp();
 	}
@@ -163,13 +195,13 @@ public class StockTest {
 	 */
 	@Test
 	public void takeSomeStock() {
-		Stock fruitBasket;
+		Stock<Item> fruitBasket;
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);
-		fruits = new Stock();
+		fruits = new Stock<Item>();
 		
-		fruits.modifyQuantity(apple, 5);
-		fruits.modifyQuantity(banana, 5);
+		fruits.add(apple, 5);
+		fruits.add(banana, 5);
 		
 		fruitBasket = fruits.take(6);
 		
@@ -183,42 +215,39 @@ public class StockTest {
 	
 	/**
 	 * Iterates over Items in Stock to print names
+	 * @throws StockException 
 	 */
 	@Test
-	public void iterateItems() {
-		String fruitType = "";
-		
+	public void iterateItems() throws StockException {
+		String fruitNames = "";
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);
-		fruits = new Stock();
-		fruits.modifyQuantity(apple, 5);
-		fruits.modifyQuantity(banana, 5);
-		
-		for(Item fruitType : fruits) {
-			fruitNames += fruitType.getName();
+		fruits = new Stock<Item>();
+		fruits.add(apple, 5);
+		fruits.add(banana, 5);
+		for(Item fruit : fruits.toSet()) {
+			fruitNames += fruit.getName();
 		}
-		
 		assertEquals("applebanana", fruitNames);
 	}
 	
 	/**
 	 * Iterates over Items in Stock to print names
 	 * Must iterate alphabetically
+	 * @throws StockException 
 	 */
 	@Test
-	public void iterateAlphabetically() {
-		String fruitType = "";
-		
+	public void iterateAlphabetically() throws StockException {
+		String fruitNames = "";
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		banana = new Item("banana", 6, 7, 8, 9, 10);
-		fruits = new Stock();
-		fruits.modifyQuantity(banana, 5);
-		fruits.modifyQuantity(apple, 5);
+		fruits = new Stock<Item>();
+		fruits.add(banana, 5);
+		fruits.add(apple, 5);
 		
-		for(Item fruitType : fruits) {
-			fruitNames += fruitType.getName();
-		}
-		
+		for(Item fruit : fruits.toSet()) {
+			fruitNames += fruit.getName();
+		}	
 		assertEquals("applebanana", fruitNames);
 	}
 	

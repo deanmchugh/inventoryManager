@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import exceptions.StockException;
 import objects.*;
 
 /**
@@ -29,6 +31,7 @@ public class StoreTest {
 	 */
 	@Test
 	public void startingCapital() {
+		store = Store.getInstance();
 		assertEquals(100000, store.getCapitalDollars());
 	}
 	
@@ -37,6 +40,7 @@ public class StoreTest {
 	 */
 	@Test 
 	public void startingCents() {
+		store = Store.getInstance();
 		assertEquals(0, store.getCapitalCents());
 	}
 	
@@ -45,8 +49,9 @@ public class StoreTest {
 	 */
 	@Test
 	public void nameStore() {
+		store = Store.getInstance();
 		store.setName("Market");
-		assertEquals("Market", store.getname());
+		assertEquals("Market", store.getName());
 	}
 	
 	/**
@@ -54,17 +59,20 @@ public class StoreTest {
 	 */
 	@Test
 	public void startingInventory() {
-		assertEquals(new Stock(), store.getInventory());
+		store = Store.getInstance();
+		assertEquals(new Stock<Item>(), store.getInventory());
 	}
 	
 	/**
 	 * Sells an item, quantity in inventory should be reduced
+	 * @throws StockException 
 	 */
 	@Test
-	public void sellItemReduceQauntity() {
-		apple = new Item("apple", 1, 2, 3, 4); //When there are 3 or fewer apples, 4 will be ordered
+	public void sellItemReduceQauntity() throws StockException {
+		store = Store.getInstance();
+		apple = new Item("apple", 1, 2, 3, 4, 0); //When there are 3 or fewer apples, 4 will be ordered
 		store.addToInventory(apple, 5); //Brings apple quantity to 5
-		store.sellItem(apple, 1);		//Brings apple quantiy to 4
+		store.sellItem(apple, 1);		//Brings apple quantity to 4
 		
 		assertEquals(4, store.getQuantity(apple));
 	}
@@ -92,11 +100,12 @@ public class StoreTest {
 	
 	/**
 	 * Items ordered must be added automatically to order list
+	 * @throws StockException 
 	 */
 	@Test
-	public void getStockOrder() {
-		expectedOrderList = new Stock();
-		expectedOrderList.modifyQuantity(apple, 6);
+	public void getStockOrder() throws StockException {
+		expectedOrderList = new Stock<Item>();
+		expectedOrderList.add(apple, 6);
 		assertEquals(expectedOrderList, store.getOrderList());
 	}
 	

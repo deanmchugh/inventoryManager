@@ -16,26 +16,29 @@ public class ItemTest {
 	private Item apple;
 	
 	/**
-	 * Construction of item with no temperature control
+	 * Construction of item with no temperature control 
+	 * @throws StockException 
 	 */
 	@Test
-	public void constructItem() {
+	public void constructItem() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 	}
 	
 	/**
 	 * Construction of item with temperature control
+	 * @throws StockException 
 	 */
 	@Test
-	public void constructControlledItem() {
+	public void constructControlledItem() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 	}
 	
 	/**
 	 * Getting purchase cost of Item
+	 * @throws StockException 
 	 */
 	@Test
-	public void getCost() {
+	public void getCost() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(1, apple.getCost());
 	}
@@ -99,54 +102,60 @@ public class ItemTest {
 	
 	/**
 	 * Getting name
+	 * @throws StockException 
 	 */
 	@Test
-	public void getName() {
+	public void getName() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals("apple", apple.getName());
 	}
 	
 	/**
 	 * Getting sell price
+	 * @throws StockException 
 	 */
 	@Test
-	public void getPrice() {
+	public void getPrice() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(2, apple.getSellPrice());
 	}
 	
 	/**
 	 * Getting re-order point
+	 * @throws StockException 
 	 */
 	@Test
-	public void getReorderPoint() {
+	public void getReorderPoint() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(3, apple.getReorderPoint());
 	}
 	
 	/**
 	 * Getting re-order amount
+	 * @throws StockException 
 	 */
 	@Test
-	public void getReorderAmount() {
+	public void getReorderAmount() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertEquals(4, apple.getReorderAmount());
 	}
 	
 	/**
 	 * Checking whether Item is temperature controlled
+	 * @throws StockException 
 	 */
 	@Test
-	public void testTemperature() {
+	public void testTemperature() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4);
 		assertFalse(apple.isTempControlled());
 	}
 	
 	/**
 	 * Getting maximum temperature
+	 * @throws StockException 
 	 */
 	@Test
-	public void getTemp() {
+	public void getTemp() throws StockException {
 		apple = new Item("apple", 1, 2, 3, 4, 5);
 		assertEquals(5, apple.getTemp());
 	}
