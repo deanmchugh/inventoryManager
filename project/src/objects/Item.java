@@ -1,7 +1,5 @@
 package objects;
 
-import java.lang.reflect.Constructor;
-
 import exceptions.StockException;
 
 /**

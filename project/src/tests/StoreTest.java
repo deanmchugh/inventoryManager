@@ -10,13 +10,13 @@ import objects.*;
  * A series of tests to assess the capability of the Store class.
  * Store contains a Stock object, which in turn is a collection of Items.
  * Item and Stock classes must be complete for these tests to be successful.
- * @author Plenco
+ * @author Tim
  */
 public class StoreTest {
 
 	private Store store;
 	private Item apple;
-	private Stock expectedOrderList;
+	private Stock<Item> expectedOrderList;
 	
 	/**
 	 * Creates singleton Store from global access point
@@ -91,7 +91,7 @@ public class StoreTest {
 	 * Neither capital nor inventory should change
 	 */
 	@Test
-	public void orderItem() {
+	public void orderItem() throws StockException {
 		store.orderItem(apple, 6);
 		assertEquals(100002, store.getCapitalDollars());
 		assertEquals(0, store.getCapitalCents());
@@ -113,7 +113,7 @@ public class StoreTest {
 	 * Sell item to below re-order point
 	 */
 	@Test
-	public void automaticOrder() {
+	public void automaticOrder() throws StockException {
 		store.sellItem(apple, 1); //Brings apple quantity to 3
 		expectedOrderList.modifyQuantity(apple, 4); //4 additional apples will be ordered
 		assertEquals(expectedOrderList, store.getOrderList());

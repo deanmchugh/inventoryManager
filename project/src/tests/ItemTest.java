@@ -3,7 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import delivery.RefridgeratedTruck;
+import delivery.RefrigeratedTruck;
 import exceptions.StockException;
 import objects.Item;
 

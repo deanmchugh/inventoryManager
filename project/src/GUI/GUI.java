@@ -3,6 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame{
 	
 	public static JButton sales, output;

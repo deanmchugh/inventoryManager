@@ -9,7 +9,7 @@ import exceptions.*;
  * A series of tests to assess the capability of the Stock class.
  * As Stock is a collection of Items, the Item class must be complete.
  * @author Tim
- * @param <E>
+ * @param <Item>
  */
 public class StockTest {
 
