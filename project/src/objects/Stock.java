@@ -1,124 +1,159 @@
 package objects;
 
-import java.util.Set;
-import exceptions.StockException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.TreeMap;
 
+import exceptions.StockException;
 /**
- * Constructs a collection on Items
+ * A class to create a collection of items in a tree map. 
  * @author Dean McHugh
  *
- * @param <Item>
  */
-@SuppressWarnings("hiding")
-public class Stock<Item> {
+
+public class Stock implements Iterable<Item> {
+
+	private TreeMap<Item, Integer> itemList;
 	
-	private Map<Item, Integer> contents;
-	
+	/**
+	 * Method to create new item list collection of key Items and value integer. 
+	 */
 	public Stock() {
-		contents = new HashMap<Item, Integer>();
+		itemList = new TreeMap<Item, Integer>();
 	}
 	
 	/**
-	 * Function to return the total amount of one Item in the collection
-	 * @param element
-	 * @return quantity of elements
+	 * Method to modify the current amount of an Item in the item list collection. 
+	 * @param item, the item that wants to change value of.
+	 * @param quantity, the amount the item value will be changed.
+	 * @throws StockException if Item is reduced to below 0 and if the item added is negative. 
+	 */
+	public void modifyQuantity(Item item, int quantity) throws StockException {
+		int currentQuantity;
+		
+		if (itemList.containsKey(item)) {
+			currentQuantity = itemList.get(item);
+			if (currentQuantity + quantity < 0) {
+				throw new StockException("Cannot reduce Item's quantity bellow zero");
+			} else {
+				itemList.put(item, currentQuantity + quantity);
+			}
+
+		} else if (quantity < 0) {
+			throw new StockException("Cannot add Item to Stock with negative quantity");
+		} else {
+			itemList.put(item, quantity);
+		}
+	}
+	
+	/**
+	 * Method to get and return the current int quantity of an item in the item list. 
+	 * @param item, the item you want the quantity of.
+	 * @return the current quantity of an Item.
 	 */
 	public int getQuantity(Item item) {
-		if (contents.containsKey(item))
-			return contents.get(item);
-		else
-			return 0;
+		return itemList.get(item);
 	}
 	
-	public boolean itemInStock(Item item) {
-		if (contents.containsKey(item))
+	/**
+	 * Method to get and return the current boolean value if an Item is in the item list.
+	 * @param item, the item you want to check is in the list.
+	 * @return true if item is in item list. false if item is absent.
+	 */
+	public Boolean itemInStock(Item item) {
+		if (itemList.containsKey(item)) {
 			return true;
-		else 
+		} else {
 			return false;
+		}
 	}
 	
 	/**
-	 * Function to add a set amount of Items to the Stock collection 
-	 * @param item
-	 * @param quantity
-	 * @throws StockException
-	 */
-	public void add(Item item, int quantity) throws StockException {
-		if (quantity<0)
-			throw new StockException();
-		else if (contents.containsKey(item))
-			contents.put(item, quantity + contents.get(item));
-		else 
-			contents.put(item, quantity);
-	}
-	
-	/**
-	 * Function to remove a set amount of Items from the Stock collection
-	 * @param element
-	 * @param quantity
-	 * @throws StockException
-	 */
-	public void remove(Item item, int quantity) throws StockException {
-		if (quantity<0 || getQuantity(item)<quantity)
-			throw new StockException();
-		else
-			contents.put(item, getQuantity(item)-quantity);
-	}
-	
-	/**
-	 * Function to iterate through the Stock collection
-	 * @return iterator of Stock collection
-	 */
-	public Iterator<Item> iterator() {
-		return new StockIterator<Item>(contents.entrySet().iterator());
-	}
-	
-	public Set<Item> toSet() {
-		return contents.keySet();
-	}
-	
-	/**
-	 * Function to return the size of the collection of Items
-	 * @return total of items
+	 * Method to get and return the current int total quantity of all items in the item list.
+	 * @return the total quantity if items in the list. 
 	 */
 	public int getTotalQuantity() {
 		int total = 0;
-		for (Item item : toSet())
-			total += getQuantity(item);
+		for (int quantity : itemList.values()) {
+			total += quantity;
+		}
 		return total;
 	}
 	
 	/**
-	 * Checks the temp of an item to see if it requires a temp control
-	 * @param item
-	 * @return true if item has a temp
+	 * Method to get and return the current boolean value if any Item in the item list needs temperature control.
+	 * @return true if item in collection needs temperature control or false if all dry items.
 	 */
-	public boolean needsTempControl() {
-		Iterator<Item> itr = iterator();
-		while (itr.hasNext()) {
-			Item item = itr.next();
-			if(item.getTemp() != 0)
+	public Boolean needsTempControl() {
+		for (Item item : itemList.keySet()) {
+			if (item.isTempControlled() && itemList.get(item) > 0) {
 				return true;
-			else
-				return false;
+			}
 		}
+		return false;
 	}
 	
-	public int getMinTemp() {
-		int minTemp = 0;
-		Iterator<Item> itr = iterator();
-		while (itr.hasNext()) {
-			Item item = itr.next();
-			if(item.getTemp() > minTemp)
-				minTemp = item.getTemp();
+	/**
+	 * Method to iterate through item list of returns the lowest current double temperature of items.
+	 * @return the lowest temperature of all items in list.
+	 * @throws StockException if all items in list are dry items.
+	 */
+	public double getMinTemp() throws StockException {
+		double minTemp = 0;
+		Boolean tempFound = false;
+		
+		if (this.needsTempControl()) {
+			for (Item item : itemList.keySet()) {
+				if (item.isTempControlled() && itemList.get(item) > 0) {
+					if (!tempFound) {
+						minTemp = item.getTemp();
+						tempFound = true;
+					} else if (item.getTemp() < minTemp) {
+						minTemp = item.getTemp();
+					}
+				}
+			}
+		} else {
+			throw new StockException("Dry goods dont have minimum temp");
 		}
+		
 		return minTemp;
 	}
 	
-	public void take(int amount) {
+	/**
+	 * Method to take items from one collection and move it to another collection.
+	 * @param quantity, the quantity of items to be transfered. 
+	 * @return a new collection of items in new stock list.
+	 */
+	public Stock take(int quantity) throws StockException {
+		Stock newStock = new Stock();
+		int quantityTaken = 0;
 		
+		for (Item item : itemList.keySet()) {
+			int currentQuantity = itemList.get(item);
+			if (currentQuantity > 0) {
+				if (quantity - quantityTaken <= 0) {
+					break;
+				} else if (currentQuantity <= quantity - quantityTaken) {
+					newStock.modifyQuantity(item, currentQuantity);
+					this.modifyQuantity(item, -currentQuantity);
+					quantityTaken += currentQuantity;
+					
+				} else if (currentQuantity > quantity - quantityTaken) {
+					newStock.modifyQuantity(item, quantity - quantityTaken);
+					this.modifyQuantity(item, quantityTaken - quantity);
+					quantityTaken += quantity - quantityTaken;
+					
+				}
+			}
+		}
+		
+		return newStock;
 	}
+
+
+	@Override
+	public Iterator<Item> iterator() {
+		return itemList.keySet().iterator();
+	}
+	
 }

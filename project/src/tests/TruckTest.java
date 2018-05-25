@@ -6,8 +6,10 @@ import org.junit.Test;
 import delivery.OrdinaryTruck;
 import delivery.RefrigeratedTruck;
 import delivery.Truck;
+import objects.Item;
 import objects.Stock;
 import exceptions.DeliveryException;
+import exceptions.StockException;
 
 /**
  * A series of tests for the truck class
@@ -17,99 +19,170 @@ import exceptions.DeliveryException;
 public class TruckTest {
 
 	private Truck truck;
-	private Stock stock = new Stock();
+	private Stock contents = new Stock();
+	private Item apple;
+	private Item orange;
 	
 	/**
-	 * Constructs a ordinary truck 
-	 * @throws DeliveryException 
+	 * Constructs a ordinary truck without temp controlled item. 
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
 	 */
 	@Test 
-	public void constructOrdinaryTruck() throws DeliveryException {
-		truck = new OrdinaryTruck(100, 100, stock);
+	public void constructOrdinaryTruck() throws DeliveryException, StockException {
+		apple = new Item("apple", 1, 2, 3, 4);
+		contents.modifyQuantity(apple, 5);
+		truck = new OrdinaryTruck(contents);
 	}
 	
 	/**
-	 * constructs refridgerated truck 
-	 * @throws DeliveryException 
-	 */
-	@Test
-	public void constructRefrigeratedTruck() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, 10);
-	}
-	
-	/**
-	 * cant construct truck with negative cost
-	 * @throws DeliveryException 
+	 * should not be able to construct ordinary truck with temp controlled item.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
 	 */
 	@Test (expected = DeliveryException.class)
-	public void negativeCost() throws DeliveryException {
-		truck = new RefrigeratedTruck(-100, 100, stock, 10);
+	public void constructTempOrdinaryTruck() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 5);
+		truck = new OrdinaryTruck(contents);
 	}
 	
 	/**
-	 * cant construct truck with negative stock cap
-	 * @throws DeliveryException 
+	 * construct Refrigerated truck with temp controlled item.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
+	 */
+	@Test
+	public void constructTempRefrigeratedTruck() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 5);
+		truck = new RefrigeratedTruck(contents);
+	}
+	
+	/**
+	 * should not be able to construct refrigerated truck with non temp controlled item. 
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative.
 	 */
 	@Test (expected = DeliveryException.class)
-	public void negativeCargoCap() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, -100, stock, 10);
+	public void constuctNonTempRefrigeratedTruck() throws DeliveryException, StockException {
+		apple = new Item("apple", 1, 2, 3, 4);
+		contents.modifyQuantity(apple, 5);
+		truck = new RefrigeratedTruck(contents);
 	}
 	
 	/**
-	 * cant construct a truck without cargo 
-	 * @throws DeliveryException 
-	 */
-	@Test (expected = DeliveryException.class)
-	public void noCargo() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, null, 10);
-	}
-	
-	/**
-	 * cant construct refridgerated truck with negative temp 
-	 * @throws DeliveryException 
-	 */
-	@Test (expected = DeliveryException.class)
-	public void negativeTemp() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, -10);
-	}
-	
-	/**
-	 * test cost getter function
-	 * @throws DeliveryException 
+	 * test cost getter function if refrigerated truck.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
 	 */
 	@Test
-	public void testGetCost() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, 10);
-		assertEquals(100, truck.getCost());
+	public void testGetCostOrdinary() throws DeliveryException, StockException {
+		apple = new Item("apple", 1, 2, 3, 4);
+		contents.modifyQuantity(apple, 4);
+		truck = new OrdinaryTruck(contents);
+		assertEquals(751.0, truck.getCost(), 0.1);
 	}
 	
 	/**
-	 * test cargo cap getter function
-	 * @throws DeliveryException 
+	 * test cost getter function if ordinary truck.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
 	 */
 	@Test
-	public void testGetCargoCap() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, 10);
-		assertEquals(100, truck.getCargoCap());
+	public void testGetCostRefrigerated() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 4);
+		truck = new RefrigeratedTruck(contents);
+		assertEquals(1040.0, truck.getCost(), 0.1);
 	}
 	
 	/**
-	 * test cargo getter function 
-	 * @throws DeliveryException 
+	 * test cargo cap getter function.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative.
 	 */
 	@Test
-	public void testGetCargo() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, 10);
-		assertEquals(stock, truck.getCargo());
+	public void testGetCargoCapOrdinary() throws DeliveryException, StockException {
+		truck = new OrdinaryTruck(contents);
+		assertEquals(1000, truck.getCargoCap());
 	}
 	
 	/**
-	 * test temp getter 
-	 * @throws DeliveryException 
+	 * test cargo cap getter function.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
 	 */
 	@Test
-	public void testGetTemp() throws DeliveryException {
-		truck = new RefrigeratedTruck(100, 100, stock, 10);
-		assertEquals(10, truck.getTemp());
+	public void testGetCargoCapRefrigerated() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 4);
+		truck = new RefrigeratedTruck(contents);
+		assertEquals(800, truck.getCargoCap());
+	}
+	
+	/**
+	 * test cargo getter function ordinary.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
+	 */
+	@Test
+	public void testGetCargoOrdinary() throws DeliveryException, StockException {
+		apple = new Item("apple", 1, 2, 3, 4);
+		contents.modifyQuantity(apple, 4);
+		truck = new OrdinaryTruck(contents);
+		assertEquals(contents, truck.getCargo());
+	}
+	
+	/**
+	 * test cargo getter function refrigerated. 
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
+	 */
+	@Test
+	public void testGetCargoRefrigerated() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 4);
+		truck = new RefrigeratedTruck(contents);
+		assertEquals(contents, truck.getCargo());
+	}
+	
+	/**
+	 * test temp getter. 
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
+	 */
+	@Test
+	public void testGetTemp() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 4);
+		truck = new RefrigeratedTruck(contents);
+		assertEquals(5.0, truck.getTemp(), 0.1);
+	}
+	
+	/**
+	 * test type getter function if refrigerated truck.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative. 
+	 */
+	@Test
+	public void testGetTypeOrdinary() throws DeliveryException, StockException {
+		apple = new Item("apple", 1, 2, 3, 4);
+		contents.modifyQuantity(apple, 4);
+		truck = new OrdinaryTruck(contents);
+		assertEquals("Ordinary", truck.getType());
+	}
+	
+	/**
+	 * test type getter function if ordinary truck.
+	 * @throws StockException if items are below 0.
+	 * @throws DeliveryException if truck list is negative.
+	 */
+	@Test
+	public void testGetTypeRefrigerated() throws DeliveryException, StockException {
+		orange = new Item("orange", 1, 2, 3, 4, 5);
+		contents.modifyQuantity(orange, 4);
+		truck = new RefrigeratedTruck(contents);
+		assertEquals("Refrigerated", truck.getType());
 	}
 }

@@ -1,135 +1,158 @@
 package objects;
 
+import objects.Item;
 import exceptions.StockException;
 
 /**
- * Class that creates an instance of a store 
+ * Class to create an instance of a store with arguments name, capital, inventory and order list.
  * @author Dean McHugh
  *
  */
 public class Store {
 
-	private static double capital = 100000.00;
-	private static String name;
-	private static Stock<Item> inventory;
-	private Stock<Item> reorderList;
+	private final double STARTING_CAPITAL = 100000d;
 
-	private static Store myObj;
+	private static Store instance = null;
+	private double capital;
+	private String name;
+	private Stock inventory;
+	private Stock orderList;
 	
 	/**
-	 * Private store constructor that will only create one version of it at a time
-	 * @param capital
-	 * @param name
-	 * @param inventory
+	 * Method that calls the reset method when a new instance of store is created.
 	 */
-	private Store(double capital, String name, Stock<Item> inventory) {
-		Store.capital = capital;
-		Store.name = name;
-		Store.inventory = inventory; 
-	}	
-	
-	public static Store getInstance() {
-		if(myObj == null) {
-			myObj = new Store(capital, name, inventory);
+	private Store(){
+		reset();
+	}
+
+	/**
+	 * Method to create a new instance of store if one dosen't exist already.
+	 * @return the shop instance.
+	 */
+	public static Store getInstance(){
+		if (instance == null){
+			instance = new Store();
 		}
-		return myObj;
+		return instance;
 	}
 	
 	/**
-	 * function to get the current capital dollars of the store
-	 * @return dollar capital of store
+	 * Method to reset the store capital, name, inventory and order list to default parameters.
 	 */
-	public int getCapitalDollars() {
-		int dollars = (int) capital;
-		return dollars;
+	public void reset(){
+		capital = STARTING_CAPITAL;
+		name = "";
+		inventory = new Stock();
+		orderList = new Stock();
 	}
 	
 	/**
-	 * function to get the current capital cents of the store
-	 * @return cents capital of store
+	 * Method to get and return the current double capital of shop instance.
+	 * @return the current shop capital.
 	 */
-	public int getCapitalCents() {
-		int cents = (int) (capital - getCapitalDollars());
-		return cents;
+	public double getCapital(){
+		//Rounds to two decimal places for display, but still holds amount at full resolution.
+		return Math.round(capital*100d)/100d;
 	}
-	
+
 	/**
-	 * function to set the name of the current store 
-	 * @param name
+	 * Method to set the name of the current shop instance.
+	 * @param newName, the name you want the store to become.
 	 */
-	public void setName(String name) {
-		Store.name = name;
+	public void setName(String newName){
+		name = newName;
 	}
-	
+
 	/**
-	 * function to get the current name of the store
-	 * @return the current store name
+	 * Method to get and return the current name of the store.
+	 * @return the current store name.
 	 */
-	public String getName() {
+	public String getName(){
 		return name;
 	}
-	
+
 	/**
-	 * function to add items to the store inventory 
-	 * and reduce current store capital
-	 * @param item
-	 * @param amount
-	 * @throws StockException
+	 * Method to get and return the current stock inventory of store.
+	 * @return the current store inventory. 
 	 */
-	public void addToInventory(Item item, int amount) throws StockException {
-		Store.inventory.add(item, amount);
-		Store.capital -= item.getCost();
-	}
-	
-	/**
-	 * function to remove items from the store inventory
-	 * then reduce current store capital and reorder items
-	 * @param item
-	 * @param amount
-	 * @throws StockException
-	 */
-	public void sellItem(Item item, int amount) throws StockException {
-		Store.inventory.remove(item, amount);
-		Store.capital += item.getSellPrice();
-		orderItem(item);
-	}
-	
-	/**
-	 * function to get the current quantity of an item in the store
-	 * @param item
-	 * @return item quantity
-	 */
-	public int getQuantity(Item item) {
-		return inventory.getQuantity(item);
-	}
-	
-	/**
-	 * function to reorder items if they go below reorder point and 
-	 * add to reorder list
-	 * @param item
-	 * @throws StockException
-	 */
-	public void orderItem(Item item) throws StockException {
-		int difference = item.getReorderAmount() - getQuantity(item);
-		if(getQuantity(item) <= item.getReorderPoint())
-			addToInventory(item, difference);
-			reorderList.add(item, difference);
-	}
-	
-	/**
-	 * function to get current reorder list 
-	 * @return reorder list
-	 */
-	public Stock<Item> getOrderList() {
-		return reorderList;
-	}
-	
-	/**
-	 * function to return current inventory of store
-	 * @return store inventory
-	 */
-	public Stock<Item> getInventory() {
+	public Stock getInventory(){
 		return inventory;
 	}
+	
+	/**
+	 * Method to get and return the current int quantity of an item in the store inventory.
+	 * @param item, the item that you want to get the quantity of.
+	 * @return the current item quantity.
+	 * @throws StockException if item is not in the current store inventory.
+	 */
+	public int getQuantity(Item item) throws StockException {
+		return inventory.getQuantity(item);
+	}
 
+	/**
+	 * Method to add an item to the current store inventory.
+	 * @param item, the item you want to add to the inventory.
+	 * @param quantity, the amount of the item you want to add.
+	 * @throws StockException if the quantity is a negative number.
+	 */
+	public void addToInventory(Item item, int quantity) throws StockException {
+		if (quantity < 0){
+			throw new StockException("Can't increase quantity by a negative number");		
+		}		
+		inventory.modifyQuantity(item, quantity);
+	}
+
+	/**
+	 * Method to sell an item in the current store inventory.
+	 * Adds price of fruit to capital of store.
+	 * @param item, the item that is being sold.
+	 * @param quantity, the amount if the item being sold.
+	 * @throws StockException if item is not in the store inventory, a negative quantity or more then the store has.
+	 */
+	public void sellItem(Item item, int quantity) throws StockException {
+		//Check if Item can be sold.
+		if (!inventory.itemInStock(item)) {
+			throw new StockException("Cannot sell an Item not in the Store Inventory");
+		} else if (quantity < 0){
+			throw new StockException("Can't sell negative quantities of Items");
+		} else if (quantity > inventory.getQuantity(item)){
+			throw new StockException("Can't sell more Items than Store has in Inventory");
+		}
+		
+		//Remove quantity of item from store and increase capital.
+		inventory.modifyQuantity(item, -quantity);
+		capital += (double)(quantity * item.getSellPrice());
+
+		//Re-order Items as necessary
+		if (inventory.getQuantity(item) <= item.getReorderPoint()){
+			orderList.modifyQuantity(item, item.getReorderAmount());
+		}
+	}
+
+	/**
+	 * Method to reduce the capital of the store instance after selling or reordering stock.
+	 * @param cost, the amount to be taken from the current store capital.
+	 * @throws StockException if the amount reduces the store capital to bellow 0.
+	 */
+	public void reduceCapital(double cost) throws StockException {
+		if (capital - cost < 0){
+			throw new StockException("Cannot reduce Store capital past 0");
+		}
+		capital -= cost;
+	}
+	
+	/**
+	 * Method to get and return the current store order list.
+	 * @return the current store order list.
+	 */
+	public Stock getOrderList() {
+		return orderList;
+	}
+	
+	/**
+	 * Method to reset the current order list to a new stock object. 
+	 */
+	public void resetOrderList() {
+		orderList = new Stock();
+	}
 }
