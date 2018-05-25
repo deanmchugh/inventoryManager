@@ -20,6 +20,10 @@ public class StockTest {
 	private Stock fruits;
 	
 
+	/**
+	 * Constructs Stock object and Items to use before each test.
+	 * Acts as a pseudo-test for the constructor of Stock objects.
+	 */
 	@Before
 	public void setUpObjects() throws StockException{
 		fruits = new Stock();
@@ -29,7 +33,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Modifying quantity of Item not in Stock adds Item to Stock
+	 * Modifying quantity of Item not in Stock adds Item to Stock.
 	 */
 	@Test
 	public void addNewItem() throws StockException {
@@ -40,7 +44,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Check whether Item exists in Stock
+	 * Check whether Item exists in Stock.
 	 */
 	@Test
 	public void itemPresent() throws StockException {
@@ -51,7 +55,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Check whether Item does not exist in Stock
+	 * Check whether Item does not exist in Stock.
 	 */
 	@Test
 	public void itemNotPresent() throws StockException {
@@ -62,7 +66,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Adds additional quantity to Item already in Stock
+	 * Adds additional quantity to Item already in Stock.
 	 */
 	@Test
 	public void addToExistingItem() throws StockException {
@@ -74,7 +78,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Removes quantity from Item already in Stock
+	 * Removes quantity from Item already in Stock.
 	 */
 	@Test 
 	public void removeFromExistingItem() throws StockException {
@@ -86,7 +90,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Removing an Item to zero quantity does not remove Item object from Stock
+	 * Removing an Item to zero quantity does not remove Item object from Stock.
 	 */
 	@Test
 	public void removeToZero() throws StockException {
@@ -98,8 +102,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Cannot remove quantity from Item not in Stock
-	 * @throws StockException
+	 * Cannot remove quantity from Item not in Stock.
 	 */
 	@Test (expected = StockException.class)
 	public void removeFromNonExistingItem() throws StockException {
@@ -110,8 +113,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Cannot reduce an Item's quantity past zero
-	 * @throws StockException
+	 * Cannot reduce an Item's quantity past zero.
 	 */
 	@Test (expected = StockException.class)
 	public void quantityToNegative() throws StockException {
@@ -121,7 +123,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Gets quantity of all Items in Stock
+	 * Gets quantity of all Items in Stock.
 	 */
 	@Test
 	public void getTotalQuantity() throws StockException {
@@ -133,7 +135,7 @@ public class StockTest {
 	
 	
 	/**
-	 * When no Items are in Stock, quantity should still exist
+	 * When no Items are in Stock, quantity should still exist.
 	 */
 	@Test
 	public void getEmptyQuantity() throws StockException {
@@ -142,7 +144,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Checks for presence of cold Items in Stock
+	 * Checks for presence of cold Items in Stock.
 	 */
 	@Test
 	public void hasTempRequirement() throws StockException {
@@ -156,7 +158,7 @@ public class StockTest {
 	
 
 	/**
-	 * Gets minimum required temperature of all Items in Stock
+	 * Gets minimum required temperature of all Items in Stock.
 	 */
 	@Test
 	public void getMinTemp() throws StockException {
@@ -170,7 +172,7 @@ public class StockTest {
 	
 	
 	/**
-	 * Cannot get minimum required temperature of purely dry Items
+	 * Cannot get minimum required temperature of purely dry Items.
 	 */
 	@Test (expected = StockException.class)
 	public void getTempNotControlled() throws StockException {
@@ -209,8 +211,8 @@ public class StockTest {
 	
 	
 	/**
-	 * Removes desired number of Items from one Stock and places in another
-	 * Lowest temperature Items removed first
+	 * Removes desired number of Items from one Stock and places in another.
+	 * Lowest temperature Items removed first.
 	 */
 	@Test
 	public void takeSomeStock() throws StockException {
@@ -224,7 +226,7 @@ public class StockTest {
 		
 		fruitBasket = fruits.take(6);
 		
-		//fruitbasket should contain the 6 coldest Items from fruits
+		//fruitBasket should contain the 6 coldest Items from fruits
 		//That is, 5 apples and 1 banana
 		//fruits should contain 4 bananas
 		assertEquals(6, fruitBasket.getTotalQuantity());

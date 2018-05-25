@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * 
+ * Exception class used to generate exceptions related to Item, Stock, and Store objects.
  * @author Tim
  */
 @SuppressWarnings("serial")

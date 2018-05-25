@@ -25,22 +25,22 @@ public class ItemTest {
 	 */
 	@Before
 	public void createDryItem() throws StockException{
-		apple = new Item("apple", 1, 2, 3, 4);
-		banana = new Item("banana", 6, 7, 8, 9, 10);
+		apple = new Item("apple", 1.2, 2.3, 3, 4);
+		banana = new Item("banana", 6.7, 7.8, 8, 9, 10.1);
 	}
 	
 
 	/**
-	 * Getting purchase cost of Item
+	 * Getting purchase cost of Item.
 	 */
 	@Test
 	public void getCost() throws StockException {
-		assertEquals(1, apple.getCost(), DELTA);
+		assertEquals(1.2, apple.getCost(), DELTA);
 	}
 	
 
 	/**
-	 * Can't construct Item with zero cost
+	 * Can't construct Item with zero cost.
 	 */
 	@Test (expected = StockException.class)
 	public void ZeroCost() throws StockException {
@@ -49,7 +49,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with negative cost
+	 * Can't construct Item with negative cost.
 	 */
 	@Test (expected = StockException.class)
 	public void NegativeCost() throws StockException {
@@ -58,7 +58,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with zero sell price
+	 * Can't construct Item with zero sell price.
 	 */
 	@Test (expected = StockException.class)
 	public void ZeroSellPrice() throws StockException {
@@ -67,7 +67,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with negative sell price
+	 * Can't construct Item with negative sell price.
 	 */
 	@Test (expected = StockException.class)
 	public void NegativeSellPrice() throws StockException {
@@ -76,7 +76,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with negative re-order point
+	 * Can't construct Item with negative re-order point.
 	 */
 	@Test (expected = StockException.class)
 	public void NegativeReorderPoint() throws StockException {
@@ -85,7 +85,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with zero re-order amount
+	 * Can't construct Item with zero re-order amount.
 	 */
 	@Test (expected = StockException.class)
 	public void ZeroReorderAmount() throws StockException {
@@ -94,7 +94,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Can't construct Item with negative re-order amount
+	 * Can't construct Item with negative re-order amount.
 	 */
 	@Test (expected = StockException.class)
 	public void NegativeReorderAmount() throws StockException {
@@ -103,7 +103,7 @@ public class ItemTest {
 	
 	
 	/**
-	 * Getting name
+	 * Getting name.
 	 */
 	@Test
 	public void getName() throws StockException {
@@ -111,11 +111,11 @@ public class ItemTest {
 	}
 	
 	/**
-	 * Getting sell price
+	 * Getting sell price.
 	 */
 	@Test
 	public void getPrice() throws StockException {
-		assertEquals(2, apple.getSellPrice(), DELTA);
+		assertEquals(2.3, apple.getSellPrice(), DELTA);
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class ItemTest {
 	}
 	
 	/**
-	 * Getting re-order amount
+	 * Getting re-order amount.
 	 */
 	@Test
 	public void getReorderAmount() throws StockException {
@@ -136,7 +136,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Checking whether Item is temperature controlled
+	 * Checking whether Item is temperature controlled.
 	 */
 	@Test
 	public void testTemperatureDry() throws StockException {
@@ -145,7 +145,7 @@ public class ItemTest {
 	
 
 	/**
-	 * Checking whether Item is temperature controlled
+	 * Checking whether Item is temperature controlled.
 	 */
 	@Test
 	public void testTemperatureCold() throws StockException {
@@ -154,16 +154,16 @@ public class ItemTest {
 
 
 	/**
-	 * Getting maximum temperature
+	 * Getting maximum temperature.
 	 */
 	@Test
 	public void getTemp() throws StockException {
-		assertEquals(10, banana.getTemp(), DELTA);
+		assertEquals(10.1, banana.getTemp(), DELTA);
 	}
 	
 
 	/**
-	 * Can't get maximum temperature of a dry item
+	 * Can't get maximum temperature of a dry item.
 	 */
 	@Test (expected = StockException.class)
 	public void noTemp() throws StockException {
@@ -172,7 +172,7 @@ public class ItemTest {
 	
 	
 	/**
-	 * Compares dry items, should compare by name alphabetically
+	 * Compares dry items, should compare by name alphabetically.
 	 */
 	@Test
 	public void compareItemsBothDry() throws StockException{
@@ -184,7 +184,7 @@ public class ItemTest {
 
 
 	/**
-	 * Compares dry items with identical names
+	 * Compares dry items with identical names.
 	 */
 	@Test
 	public void compareItemsSameNameBothDry() throws StockException{
@@ -196,18 +196,18 @@ public class ItemTest {
 
 
 	/**
-	 * Compares same temperature items with identical names
+	 * Compares same temperature items with identical names.
 	 */
 	@Test
 	public void compareItemsSameNameSameTemp() throws StockException{
-		apple = new Item("banana", 1, 2, 3, 4, 10);
+		apple = new Item("banana", 1, 2, 3, 4, 10.1);
 
 		assertTrue(apple.compareTo(banana) == 0);	
 	}
 
 
 	/**
-	 * Compares dry item with temp controlled item, temp controlled item should come first
+	 * Compares dry item with temp controlled item, temp controlled item should come first.
 	 */
 	@Test
 	public void compareItemsOneDryOneCold(){
@@ -217,7 +217,7 @@ public class ItemTest {
 
 
 	/**
-	 * Compares cold items with different temperatures
+	 * Compares cold items with different temperatures.
 	 */
 	@Test
 	public void compareItemsBothCold() throws StockException{
