@@ -13,6 +13,8 @@ import objects.Item;
  */
 public class ItemTest {
 	
+	private final double DELTA = 0.01d;
+	
 	private Item apple;
 	private Item banana;	
 
@@ -33,7 +35,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getCost() throws StockException {
-		assertEquals(1, apple.getCost());
+		assertEquals(1, apple.getCost(), DELTA);
 	}
 	
 
@@ -113,7 +115,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getPrice() throws StockException {
-		assertEquals(2, apple.getSellPrice());
+		assertEquals(2, apple.getSellPrice(), DELTA);
 	}
 	
 	/**
@@ -156,7 +158,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getTemp() throws StockException {
-		assertEquals(10, banana.getTemp());
+		assertEquals(10, banana.getTemp(), DELTA);
 	}
 	
 

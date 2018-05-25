@@ -7,16 +7,16 @@ import objects.*;
 
 public class main {
 	
-	public static void main(String[] args) {
-		new GUI();
+	public static void main(String[] args) throws CSVFormatException, StockException, DeliveryException {
+		logicLoopTest();
 	}
 
 	//Not to be implemented as a straight method like this. Each chunk of code should be executed on a button press
-	public static void logicLoop() throws CSVFormatException, StockException, DeliveryException {
+	public static void logicLoopTest() throws CSVFormatException, StockException, DeliveryException {
 		//GUI STARTS
 		Store shopFront = Store.getInstance();
 		shopFront.setName("Local Store");
-		
+		System.out.println(shopFront.getCapital());
 		
 		//BUTTON PRESSED "READ ITEM PROPERTIES"
 		Stock itemList = FileRead.readProperties();
@@ -39,6 +39,8 @@ public class main {
 			shopFront.reduceCapital(shippingOrder.getTotalCost());
 			shopFront.resetOrderList();
 			
+			System.out.println(shopFront.getCapital());
+			
 			//BUTTON PRESSED IMPORT SALES LOG
 			//Load sales log, change store quantities, add necessary items to order list (Automatically handled by store class)
 			Stock sales;
@@ -46,7 +48,7 @@ public class main {
 				sales = FileRead.readSalesLog();
 			} catch (CSVFormatException fileException) {
 				//End program as next sales log does not seem to exist
-				return;
+				break;
 			}
 			
 			for (Item itemSold : sales) {
@@ -59,7 +61,7 @@ public class main {
 			shippingOrder = new Manifest(shopFront.getOrderList());
 			FileWrite.writeManifest(shippingOrder);
 		}
-		
+		System.out.println("No more sales logs!");
 	}
 
 }

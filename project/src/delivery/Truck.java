@@ -59,7 +59,7 @@ public abstract class Truck {
 	 * @throws DeliveryException Exception thrown by Truck types with no set temperature.
 	 * @author Tim
 	 */
-	abstract public int getTemp() throws DeliveryException;
+	abstract public double getTemp() throws DeliveryException;
 
 	
 	/**

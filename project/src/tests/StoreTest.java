@@ -14,7 +14,7 @@ import objects.*;
  */
 public class StoreTest {
 
-	private final double DELTA = 0.001d;
+	private final double DELTA = 0.01d;
 	
 	private static Store store;
 	private static Item apple;

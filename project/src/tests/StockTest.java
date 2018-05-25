@@ -13,6 +13,8 @@ import exceptions.*;
  */
 public class StockTest {
 
+	private final double DELTA = 0.01d;
+	
 	private Item apple;
 	private Item banana;
 	private Stock fruits;
@@ -163,7 +165,7 @@ public class StockTest {
 		fruits.modifyQuantity(apple, 1);
 		fruits.modifyQuantity(banana, 1);
 		
-		assertEquals(5, fruits.getMinTemp());
+		assertEquals(5, fruits.getMinTemp(), DELTA);
 	}
 	
 	
@@ -227,7 +229,7 @@ public class StockTest {
 		//fruits should contain 4 bananas
 		assertEquals(6, fruitBasket.getTotalQuantity());
 		assertEquals(4, fruits.getTotalQuantity());
-		assertEquals(10, fruits.getMinTemp());
+		assertEquals(10, fruits.getMinTemp(), DELTA);
 	}
 	
 }

@@ -14,7 +14,7 @@ import delivery.*;
 public class FileWrite {
 	
 	//TODO: Update File path/name
-	private static String FILE_NAME = "../../Sample-Files/manifest.csv";
+	private static String FILE_NAME = System.getProperty("user.dir") + "/Test-Files/manifest.csv";
 	private static String NEW_TRUCK_SYM = ">";
 	private static String NEW_LINE_SYM = "\n";
 	private static String VALUE_SEPERATOR = ",";

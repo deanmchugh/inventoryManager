@@ -12,10 +12,10 @@ import exceptions.*;
  */
 public class FileRead {
 
-		private static final String FILE_PATH = "../../Sample-Files/";
+		private static final String FILE_PATH = System.getProperty("user.dir") + "/Test-Files/";
 		private static final String VALUE_SEPERATOR = ",";
-		private static final int LENGTH_DRY_ITEM = 4;
-		private static final int LENGTH_COLD_ITEM = 5;
+		private static final int LENGTH_DRY_ITEM = 5;
+		private static final int LENGTH_COLD_ITEM = 6;
 		private static final String TRUCK_PREFIX = ">";
 		
 		private static Stock itemList;
@@ -163,18 +163,18 @@ public class FileRead {
 			String name = line.split(VALUE_SEPERATOR)[0];
 			
 			//Size properties array appropriately for type of Item, and populate with Integer values parsed from line
-			int[] properties = new int[numProperties - 1];
+			double[] properties = new double[numProperties - 1];
 			for (int propertyNum = 1; propertyNum < numProperties; propertyNum++) {
-				String property = line.split(VALUE_SEPERATOR)[propertyNum + 1];
-				properties[propertyNum - 1] = Integer.parseInt(property);
+				String property = line.split(VALUE_SEPERATOR)[propertyNum];
+				properties[propertyNum - 1] = Double.parseDouble(property);
 			}
 			
 			//Dry and cold Items use different constructors depending on number of properties.
 			//If there is not an expected number of properties, an Item cannot be created and the CSV file must be incorrect.
 			if (numProperties == LENGTH_DRY_ITEM) {
-				return new Item(name, properties[0], properties[1], properties[2], properties[3]);
+				return new Item(name, properties[0], properties[1], (int)properties[2], (int)properties[3]);
 			} else if (numProperties == LENGTH_COLD_ITEM) {
-				return new Item(name, properties[0], properties[1], properties[2], properties[3], properties[4]);
+				return new Item(name, properties[0], properties[1], (int)properties[2], (int)properties[3], properties[4]);
 			} else {
 				throw new CSVFormatException("Incorrect number of item properties!");
 			}
@@ -203,7 +203,7 @@ public class FileRead {
 		 */
 		private static Item getItem(String itemName){
 			for (Item item : itemList) {
-				if (item.getName() == itemName) {
+				if (itemName.equals(item.getName())) {
 					return item;
 				}
 			}
@@ -222,9 +222,9 @@ public class FileRead {
 		 */
 		private static Truck createTruck(String truckType, Stock contents) throws DeliveryException, StockException{
 			Truck newTruck;
-			if (truckType == "Ordinary"){ //Stock generated, place in truck, add to manifest
+			if (truckType.equals("Ordinary")){ //Stock generated, place in truck, add to manifest
 				newTruck = new OrdinaryTruck(contents);
-			} else if (truckType == "Refrigerated"){
+			} else if (truckType.equals("Refrigerated")){
 				newTruck = new RefrigeratedTruck(contents);
 			} else {
 				throw new DeliveryException("Manifest contains unknown type of truck!");

@@ -10,7 +10,7 @@ import objects.Stock;
 public class OrdinaryTruck extends Truck {
 
 	private static final int CAPACITY = 1000;
-	private static final String TYPE = "OrdinaryTruck";
+	private static final String TYPE = "Ordinary";
 	
 	private double cost;
 	
@@ -27,8 +27,7 @@ public class OrdinaryTruck extends Truck {
 		}
 		
 		//Calculates cost as a function of quantity, and rounds to nearest cent.
-		this.cost = (750 + 0.25 * contents.getTotalQuantity());
-		this.cost = (double)Math.round(this.cost * 100d)/100d;
+		this.cost = (750d + 0.25 * contents.getTotalQuantity());
 	}
 
 
@@ -38,7 +37,7 @@ public class OrdinaryTruck extends Truck {
 	 * @return Will never return a value.
 	 * @throws DeliveryException always.
 	 */
-	public int getTemp() throws DeliveryException {
+	public double getTemp() throws DeliveryException {
 		throw new DeliveryException("Ordinary trucks do not have a set temperature!");
 	}
 

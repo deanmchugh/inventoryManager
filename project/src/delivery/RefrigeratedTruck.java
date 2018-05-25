@@ -13,10 +13,10 @@ public class RefrigeratedTruck extends Truck {
 	private static final int MIN_TEMP = -20;
 	private static final int MAX_TEMP = 10;
 	private static final int CAPACITY = 800;
-	private static final String TYPE = "RefrigeratedTruck";
+	private static final String TYPE = "Refrigerated";
 	
 	private double cost;
-	private int temperature;
+	private double temperature;
 	
 
 	/**
@@ -38,8 +38,7 @@ public class RefrigeratedTruck extends Truck {
 		}
 		
 		//Calculates cost as a function of temperature, and rounds to the nearest cent.
-		cost = 900.0 + 200.0 * Math.pow(0.7, temperature / 5.0);
-		cost = (double)Math.round(cost * 100d)/100d;
+		cost = 900d + 200d * Math.pow(0.7, temperature / 5d);
 	}
 
 	
@@ -47,7 +46,7 @@ public class RefrigeratedTruck extends Truck {
 	 * Getter method for set temperature of Truck.
 	 * @return Integer temperature of Truck.
 	 */
-	public int getTemp() {
+	public double getTemp() {
 		return this.temperature;
 	}
 

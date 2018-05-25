@@ -79,7 +79,6 @@ public class Manifest implements Iterable<Truck> {
 			}
 			cost += truck.getCost();
 		}
-		//TODO: Round cost to 2 decimal places?
 		return cost;
 	}
 	
