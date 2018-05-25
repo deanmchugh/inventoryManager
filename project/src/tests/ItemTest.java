@@ -200,7 +200,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void compareItemsSameNameSameTemp() throws StockException{
-		apple = new Item("banana", 1, 2, 3, 4, 10);
+		apple = new Item("banana", 1, 2, 3, 4, 10.1);
 
 		assertTrue(apple.compareTo(banana) == 0);	
 	}
