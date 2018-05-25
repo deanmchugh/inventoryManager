@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * 
+ * Exception class used to construct exceptions related to file read/write.
  * @author Tim
  */
 @SuppressWarnings("serial")

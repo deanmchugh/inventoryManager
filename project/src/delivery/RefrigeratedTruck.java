@@ -6,6 +6,7 @@ import objects.Stock;
 
 /**
  * Class to create a RefrigeratedTruck object that contains Stock at a specified temperature at a cost.
+ * This class extends the abstract class Truck.
  * @author Tim
  */
 public class RefrigeratedTruck extends Truck {
@@ -23,7 +24,7 @@ public class RefrigeratedTruck extends Truck {
 	 * Constructor for RefrigeratedTruck. Stores contents at a set temperature, and calculates cost to use Truck.
 	 * @param contents Stock object to represent the contents of the Truck.
 	 * @throws DeliveryException Throws an exception when contents is null, temperature is out of bounds, or use of a RefrigeratedTruck is not needed.
-	 * @throws StockException 
+	 * @throws StockException Re-throws exceptions thrown by methods used within.
 	 */
 	public RefrigeratedTruck(Stock contents) throws DeliveryException, StockException {
 		super(contents);
@@ -37,7 +38,7 @@ public class RefrigeratedTruck extends Truck {
 			throw new DeliveryException("Temperature not within bounds!");
 		}
 		
-		//Calculates cost as a function of temperature, and rounds to the nearest cent.
+		//Calculates cost as a function of temperature, no rounding occurs.
 		cost = 900d + 200d * Math.pow(0.7, temperature / 5d);
 	}
 

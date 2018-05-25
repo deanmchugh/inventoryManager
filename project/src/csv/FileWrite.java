@@ -13,21 +13,18 @@ import delivery.*;
  */
 public class FileWrite {
 	
-	//TODO: Update File path/name
-	private static String FILE_NAME = System.getProperty("user.dir") + "/Test-Files/manifest.csv";
-	private static String NEW_TRUCK_SYM = ">";
-	private static String NEW_LINE_SYM = "\n";
-	private static String VALUE_SEPERATOR = ",";
+	private static final String FILE_NAME = System.getProperty("user.dir") + "/Test-Files/manifest.csv";
+	private static final String NEW_TRUCK_SYM = ">";
+	private static final String NEW_LINE_SYM = "\n";
+	private static final String VALUE_SEPERATOR = ",";
 	
 	private static FileWriter writer;
 	
-	
 	/**
 	 * Writes shipping Manifest to .csv file, overwriting existing file.
-	 * The type of each Truck in the Manifest is written to a seperate line, each followed by its Contents.
+	 * The type of each Truck in the Manifest is written to a separate line, each followed by its Contents.
 	 * @param shippingManifest Manifest object containing each Truck assigned to deliver Stock to the Store.
 	 * @throws CSVFormatException Exception caused by errors in writing or closing file.
-	 * @author Tim
 	 */
 	public static void writeManifest(Manifest shippingManifest) throws CSVFormatException {
 		try {
@@ -44,7 +41,7 @@ public class FileWrite {
 		try {
 			writer.close();
 		} catch (Exception e) {
-			throw new CSVFormatException("Error occured closing Manifest file after writing!");
+			throw new CSVFormatException("Error occured closing Manifest file!");
 		}
 	}
 	
@@ -52,7 +49,7 @@ public class FileWrite {
 	/**
 	 * For each Item in a Truck, writes the Item name and quantity to a new line of the manifest .csv file.
 	 * @param contents A Stock object containing Items and quantity of Items aboard a single truck.
-	 * @author Tim
+	 * @throws CSVFormatException Thrown when an error occurs writing a line.
 	 */
 	private static void writeContents(Stock contents) throws CSVFormatException {
 		try {

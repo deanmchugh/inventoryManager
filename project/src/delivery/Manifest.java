@@ -17,7 +17,6 @@ public class Manifest implements Iterable<Truck> {
 	
 	/**
 	 * Constructor for Manifest, initializes arraylist to store Trucks.
-	 * @author Tim
 	 */
 	public Manifest() {
 		truckList = new ArrayList<Truck>();
@@ -53,7 +52,6 @@ public class Manifest implements Iterable<Truck> {
 	/**
 	 * Adds a Truck to the manifest.
 	 * @param truck Truck object to be added to the manifest.
-	 * @author Tim
 	 */
 	public void addTruck(Truck truck) {
 		truckList.add(truck);
@@ -63,7 +61,6 @@ public class Manifest implements Iterable<Truck> {
 	/**
 	 * Method to allow a for each loop for Trucks within the Manifest. Returns the iterator of the ArrayList storing Trucks.
 	 * @return Iterator for next Truck in Manifest.
-	 * @author Tim
 	 */
 	@Override
 	public Iterator<Truck> iterator() {

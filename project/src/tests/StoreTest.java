@@ -22,13 +22,12 @@ public class StoreTest {
 	
 
 	/**
-	 * Sets up objects at start of 
+	 * Sets up objects before any tests run.
 	 */
 	@BeforeClass
 	public static void getStore() throws StockException {
 		store = Store.getInstance();
 		apple = new Item("apple", 1, 2, 3, 4);
-		nextOrder = new Stock();
 	}
 
 	
@@ -36,16 +35,17 @@ public class StoreTest {
 	 * Calls method to reset store to starting values.
 	 * Implicit test of reset() method, although this method should not be used
 	 * except for testing. This is needed due to the singleton nature of the Store
-	 * class and the unknown order of JUnit tests.
+	 * class and the unknown run order of JUnit tests.
 	 */
 	@Before
 	public void resetStore(){
 		store.reset();
+		nextOrder = new Stock();
 	}
 	
 
 	/**
-	 * Gets starting capital of store
+	 * Gets starting capital of store.
 	 */
 	@Test
 	public void startingCapital() {
@@ -54,7 +54,7 @@ public class StoreTest {
 	
 	
 	/**
-	 * Gives name to store
+	 * Gives name to store.
 	 */
 	@Test
 	public void nameStore() {
@@ -64,7 +64,7 @@ public class StoreTest {
 
 	
 	/**
-	 * Checks inventory upon creation is an empty stock object
+	 * Checks inventory upon creation is an empty stock object.
 	 */
 	@Test
 	public void startingInventory() {
@@ -73,7 +73,7 @@ public class StoreTest {
 	
 
 	/**
-	 * Add Item to store
+	 * Add Item to store.
 	 */
 	@Test
 	public void addItem() throws StockException {
@@ -84,7 +84,7 @@ public class StoreTest {
 
 
 	/**
-	 * Add extra quantity to existing Item
+	 * Add extra quantity to existing Item.
 	 */
 	@Test
 	public void increaseItemQuantity() throws StockException {
@@ -95,7 +95,7 @@ public class StoreTest {
 
 	
 	/**
-	 * Cannot increase an Item's quantity by a negative value
+	 * Cannot increase an Item's quantity by a negative value.
 	 */
 	@Test (expected = StockException.class)
 	public void increaseQuantityByNegative() throws StockException {
@@ -104,7 +104,7 @@ public class StoreTest {
 
 
 	/**
-	 * Sells an item, quantity in inventory should be reduced
+	 * Sells an item, quantity in inventory should be reduced.
 	 */
 	@Test
 	public void sellItemReduceQauntity() throws StockException {
@@ -117,7 +117,7 @@ public class StoreTest {
 	
 	
 	/**
-	 * Attempts to sell more of an Item than Store contains 
+	 * Attempts to sell more of an Item than Store contains.
 	 */
 	@Test (expected = StockException.class)
 	public void sellTooManyItems() throws StockException {
@@ -127,7 +127,7 @@ public class StoreTest {
 
 
 	/**
-	 * Attempts to sell negative amount of an Item
+	 * Attempts to sell negative amount of an Item.
 	 */
 	@Test (expected = StockException.class)
 	public void sellNegativeQuantity() throws StockException {
@@ -140,7 +140,7 @@ public class StoreTest {
 
 
 	/**
-	 * Sells an Item, capital should increase
+	 * Sells an Item, capital should increase.
 	 */
 	@Test
 	public void sellItemIncreaseCapital() throws StockException {
@@ -152,7 +152,7 @@ public class StoreTest {
 
 	
 	/**
-	 *Sells an item to re-orderpoint, Item should be added to next order
+	 *Sells an item to re-orderpoint, Item should be added to next order.
 	 */
 	@Test
 	public void sellBelowReorderPoint() throws StockException {
@@ -168,7 +168,7 @@ public class StoreTest {
 
 
 	/**
-	 * Given a dollar value, reduce capital by this amount
+	 * Given a dollar value, reduce capital by this amount.
 	 */	
 	@Test
 	public void reduceCapital() throws StockException {
@@ -178,7 +178,7 @@ public class StoreTest {
 
 
 	/**
-	 * Cannot reduce capital past zero
+	 * Cannot reduce capital past zero.
 	 */	
 	@Test (expected = StockException.class)
 	public void reduceCapitalToNegative() throws StockException {

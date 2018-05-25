@@ -5,6 +5,7 @@ import objects.Stock;
 
 /**
  * Class to create an OrdinaryTruck object that contains Stock at no specific temperature at a cost.
+ * This class extends the abstract class Truck.
  * @author Tim
  */
 public class OrdinaryTruck extends Truck {
@@ -26,7 +27,7 @@ public class OrdinaryTruck extends Truck {
 			throw new DeliveryException("Cannot store temperature controlled items in an ordinary truck!");
 		}
 		
-		//Calculates cost as a function of quantity, and rounds to nearest cent.
+		//Calculates cost as a function of quantity, no rounding occurs.
 		this.cost = (750d + 0.25 * contents.getTotalQuantity());
 	}
 

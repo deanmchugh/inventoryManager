@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * 
+ * Exception class used to construct exceptions related to Delivery objects.
  * @author Tim
  */
 @SuppressWarnings("serial")
