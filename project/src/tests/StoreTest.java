@@ -15,6 +15,11 @@ import objects.*;
 public class StoreTest {
 
 	private final double DELTA = 0.01d;
+	private final static double APPLE_COST = 1.2;
+	private final static double APPLE_SELLPRICE = 2.3;
+	private final static int APPLE_REORDERPOINT = 3;
+	private final static int APPLE_REORDERAMOUNT = 4;
+	private final static double STARTING_BALANCE = 100000d;
 	
 	private static Store store;
 	private static Item apple;
@@ -27,7 +32,7 @@ public class StoreTest {
 	@BeforeClass
 	public static void getStore() throws StockException {
 		store = Store.getInstance();
-		apple = new Item("apple", 1, 2, 3, 4);
+		apple = new Item("apple", APPLE_COST, APPLE_SELLPRICE, APPLE_REORDERPOINT, APPLE_REORDERAMOUNT);
 	}
 
 	
@@ -49,7 +54,7 @@ public class StoreTest {
 	 */
 	@Test
 	public void startingCapital() {
-		assertEquals(100000d, store.getCapital(), DELTA);
+		assertEquals(STARTING_BALANCE, store.getCapital(), DELTA);
 	}
 	
 	
@@ -136,23 +141,29 @@ public class StoreTest {
 	}
 
 
-	//TODO: Cannot sell Item not in Store
-
+	/**
+	 * Cannot sell Item not in Store.
+	 */
+	@Test (expected = StockException.class)
+	public void sellWrongItem() throws StockException {
+		Item banana = new Item("banana", 6, 7, 8, 9);
+		store.sellItem(banana, 1);
+	}
+	
 
 	/**
 	 * Sells an Item, capital should increase.
 	 */
 	@Test
 	public void sellItemIncreaseCapital() throws StockException {
-		//N.B. Cost of an apple is $2.00
 		store.addToInventory(apple, 10);
 		store.sellItem(apple, 1);
-		assertEquals(100002.00d, store.getCapital(), DELTA);
+		assertEquals(STARTING_BALANCE + APPLE_SELLPRICE, store.getCapital(), DELTA);
 	}
 
 	
 	/**
-	 *Sells an item to re-orderpoint, Item should be added to next order.
+	 *Sells an item to reorder point, Item should be added to next order.
 	 */
 	@Test
 	public void sellBelowReorderPoint() throws StockException {
@@ -161,11 +172,7 @@ public class StoreTest {
 		nextOrder.modifyQuantity(apple, 4);
 		assertEquals(nextOrder.getTotalQuantity(), store.getOrderList().getTotalQuantity());
 	}
-
-
-	//Send order to manifest
-	//Neither stock levels not capital should change
-
+	
 
 	/**
 	 * Given a dollar value, reduce capital by this amount.
@@ -182,7 +189,7 @@ public class StoreTest {
 	 */	
 	@Test (expected = StockException.class)
 	public void reduceCapitalToNegative() throws StockException {
-		store.reduceCapital(200000d);
+		store.reduceCapital(2 * STARTING_BALANCE);
 	}
 
 }

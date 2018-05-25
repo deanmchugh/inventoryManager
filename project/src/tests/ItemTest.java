@@ -25,8 +25,8 @@ public class ItemTest {
 	 */
 	@Before
 	public void createDryItem() throws StockException{
-		apple = new Item("apple", 1, 2, 3, 4);
-		banana = new Item("banana", 6, 7, 8, 9, 10);
+		apple = new Item("apple", 1.2, 2.3, 3, 4);
+		banana = new Item("banana", 6.7, 7.8, 8, 9, 10.1);
 	}
 	
 
@@ -35,7 +35,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getCost() throws StockException {
-		assertEquals(1, apple.getCost(), DELTA);
+		assertEquals(1.2, apple.getCost(), DELTA);
 	}
 	
 
@@ -115,7 +115,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getPrice() throws StockException {
-		assertEquals(2, apple.getSellPrice(), DELTA);
+		assertEquals(2.3, apple.getSellPrice(), DELTA);
 	}
 	
 	/**
@@ -158,7 +158,7 @@ public class ItemTest {
 	 */
 	@Test
 	public void getTemp() throws StockException {
-		assertEquals(10, banana.getTemp(), DELTA);
+		assertEquals(10.1, banana.getTemp(), DELTA);
 	}
 	
 
