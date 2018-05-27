@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -263,39 +264,43 @@ public class GUI extends JFrame implements ActionListener, Runnable{
 		if (src == btnProperties) {
 			try {
 				EntryPoint.importItemProperties();
+				EntryPoint.exportManifest();
+				EntryPoint.importManifest();
 			} catch (CSVFormatException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+			} catch (DeliveryException e1) {
+				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("In");
 			btnProperties.setText("Imported");
 			btnProperties.setEnabled(false);
 			btnManifestIn.setEnabled(true);
+			btnManifestOut.setEnabled(true);
+		    btnSalesIn.setEnabled(true);
 			messages.setText("You have imported item Properties");
 		} else if (src == btnManifestIn) {
 			try {
 				EntryPoint.importManifest();
 			} catch (CSVFormatException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (DeliveryException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("In");
-			btnManifestOut.setEnabled(true);
-		    btnSalesIn.setEnabled(true);
 			messages.setText("You have imported the manifest");
 		} else if (src == btnManifestOut) {
 			try {
 				EntryPoint.exportManifest();
 			} catch (DeliveryException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (CSVFormatException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("Out");
 			messages.setText("You have exported the manifest");
@@ -303,12 +308,12 @@ public class GUI extends JFrame implements ActionListener, Runnable{
 			try {
 				EntryPoint.importSales();
 			} catch (StockException e1) {
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("In");
 			messages.setText("You have imported the sales");
 		} else if (src == btnCapital) {
-			messages.setText("Current Capital: "+String.valueOf(new Double(EntryPoint.shopFront.getCapital())));
+			messages.setText(String.format("Current Capital: $%.2f", EntryPoint.shopFront.getCapital()));
 		}
 		try {
 			newTable();
@@ -322,10 +327,11 @@ public class GUI extends JFrame implements ActionListener, Runnable{
 	 * @throws StockException if stock below 0.
 	 */
 	public void newTable() throws StockException {
-		tm.fireTableDataChanged();
+		for(int i = tm.getRowCount() - 1; i > -1; i--) {
+			tm.removeRow(i);
+		}
 		double temp = 0;
 		for(Item item : EntryPoint.shopFront.getInventory()) {
-			System.out.println("G");
 			int quantity = EntryPoint.shopFront.getInventory().getQuantity(item);
 			String name = item.getName();
 			double cost = item.getCost();
