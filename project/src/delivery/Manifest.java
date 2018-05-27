@@ -26,8 +26,8 @@ public class Manifest implements Iterable<Truck> {
 	/**
 	 * Additional constructor for Manifest. Takes a Stock object, and divides this up into Trucks.
 	 * @param totalOrder Stock object containing Items and quantity of Items ordered.
-	 * @throws DeliveryException
-	 * @throws StockException
+	 * @throws DeliveryException Re-throws exceptions thrown by methods used within.
+	 * @throws StockException Re-throws exceptions thrown by methods used within.
 	 */
 	public Manifest(Stock totalOrder) throws DeliveryException, StockException {
 		truckList = new ArrayList<Truck>();

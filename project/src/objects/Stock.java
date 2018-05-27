@@ -123,6 +123,7 @@ public class Stock implements Iterable<Item> {
 	 * Method to take items from one collection and move it to another collection.
 	 * @param quantity, the quantity of items to be transfered. 
 	 * @return a new collection of items in new stock list.
+	 * @throws StockException Re-throws exceptions thrown by methods used within.
 	 */
 	public Stock take(int quantity) throws StockException {
 		Stock newStock = new Stock();
