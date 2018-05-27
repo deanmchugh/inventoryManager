@@ -73,14 +73,11 @@ public class EntryPoint {
 	/**
 	 * Method to import the current store sales logs
 	 * @throws StockException if the stock is reduced to negative.
+	 * @throws CSVFormatException if csv is not formated properly
 	 */
-	public static void importSales() throws StockException {
+	public static void importSales() throws StockException, CSVFormatException {
 		Stock sales = null;
-		try {
-			sales = FileRead.readSalesLog();
-		} catch (CSVFormatException fileException) {
-			//End program as next sales log does not seem to exist
-		}
+		sales = FileRead.readSalesLog();
 		
 		for (Item itemSold : sales) {
 			shopFront.sellItem(itemSold, sales.getQuantity(itemSold));

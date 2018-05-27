@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,16 +23,10 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
-import csv.FileRead;
-import csv.FileWrite;
-import delivery.Manifest;
-import delivery.Truck;
 import exceptions.CSVFormatException;
 import exceptions.DeliveryException;
 import exceptions.StockException;
 import objects.Item;
-import objects.Stock;
-import objects.Store;
 
 /**
  * Class to implement Gui 
@@ -267,51 +260,60 @@ public class GUI extends JFrame implements ActionListener, Runnable{
 				EntryPoint.exportManifest();
 				EntryPoint.importManifest();
 			} catch (CSVFormatException e1) {
-				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (DeliveryException e1) {
-				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("In");
 			btnProperties.setText("Imported");
 			btnProperties.setEnabled(false);
-			btnManifestIn.setEnabled(true);
-			btnManifestOut.setEnabled(true);
 		    btnSalesIn.setEnabled(true);
 			messages.setText("You have imported item Properties");
 		} else if (src == btnManifestIn) {
 			try {
 				EntryPoint.importManifest();
 			} catch (CSVFormatException e1) {
-				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (DeliveryException e1) {
-				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("In");
 			messages.setText("You have imported the manifest");
+			btnManifestIn.setEnabled(false);
+			btnSalesIn.setEnabled(true);
 		} else if (src == btnManifestOut) {
 			try {
 				EntryPoint.exportManifest();
 			} catch (DeliveryException e1) {
-				JOptionPane.showMessageDialog(null, "The delivery must contain values", "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Delivery Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (StockException e1) {
-				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Stock Exception", JOptionPane.PLAIN_MESSAGE);
 			} catch (CSVFormatException e1) {
-				JOptionPane.showMessageDialog(null, "The CSV is not formated correctly", "CSV Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "CSV Exception", JOptionPane.PLAIN_MESSAGE);
 			}
 			//fileSelect("Out");
 			messages.setText("You have exported the manifest");
+			btnManifestOut.setEnabled(false);
+			btnManifestIn.setEnabled(true);
 		} else if (src == btnSalesIn) {
 			try {
 				EntryPoint.importSales();
 			} catch (StockException e1) {
-				JOptionPane.showMessageDialog(null, "Cannot sell stock below 0", "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Stock Exception", JOptionPane.PLAIN_MESSAGE);
+			} catch (CSVFormatException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "CSV Exception", JOptionPane.PLAIN_MESSAGE);
+				if (e1.getMessage().contains("not found!")) {
+					return;
+				}
 			}
 			//fileSelect("In");
 			messages.setText("You have imported the sales");
+			btnSalesIn.setEnabled(false);
+			btnManifestOut.setEnabled(true);
 		} else if (src == btnCapital) {
 			messages.setText(String.format("Current Capital: $%.2f", EntryPoint.shopFront.getCapital()));
 		}
