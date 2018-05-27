@@ -128,7 +128,7 @@ public class Item implements Comparable<Item> {
 
 
 	@Override
-public int compareTo(Item otherItem) {
+	public int compareTo(Item otherItem) {
 		
 		final int GREATER_THAN = 1;
 		final int LESS_THAN = -1;
