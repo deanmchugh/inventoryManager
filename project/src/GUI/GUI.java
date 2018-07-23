@@ -350,34 +350,6 @@ public class GUI extends JFrame implements ActionListener, Runnable{
 		}
 		table.setModel(tm);
 	}
-	
-	/**
-	 * Method to return the file path of required files. 
-	 * @param str, string to tell which button is pressed.
-	 * @return a string of the absolute file path of chosen file.
-	 */
-	public String fileSelect(String str) {
-		String filePath = null;
-		JButton open = new JButton();
-		JButton save = new JButton();
-        JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new java.io.File("."));
-        fc.setDialogTitle("Select CVS File");
-        if(str == "Out") {
-        	fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        	if(fc.showSaveDialog(save) == JFileChooser.APPROVE_OPTION) {
-            	filePath = fc.getCurrentDirectory().getAbsolutePath();
-            }
-        }else if (str == "In"){
-        	fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        	if(fc.showOpenDialog(open) == JFileChooser.APPROVE_OPTION) {
-            	filePath = fc.getSelectedFile().getAbsolutePath();
-            }
-        }else {
-        	filePath = null;
-        }
-        return filePath;
-    }
 
 	@Override
 	public void run() {
